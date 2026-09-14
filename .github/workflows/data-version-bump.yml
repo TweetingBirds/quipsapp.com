@@ -101,7 +101,7 @@ jobs:
 
           cat > /tmp/pr-body.md <<EOF
           Bumps the data pin from \`${PINNED}\` to \`${PUBLISHED}\`, picking up
-          [quips-collections v${PUBLISHED}](https://github.com/natebird/quips-collections/releases/tag/v${PUBLISHED}).
+          [quips-collections v${PUBLISHED}](https://github.com/TweetingBirds/quips-collections/releases/tag/v${PUBLISHED}).
 
           Opened automatically by \`.github/workflows/data-version-bump.yml\`, which
           watches \`data.quipsapp.com/latest/manifest.json\` for a version the site
