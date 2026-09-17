@@ -240,10 +240,10 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
   write in — support, press, collections, newsletter, the course. The legal
   pages (`privacy.html`, `terms.html`, and `legal/*.md` they build from) keep
   `feedback@quipsapp.com` as the formal contact address.
-- Pricing: free tier = 100 saved quotes; Premium = $0.99/month or $8.99/year
-  (limited launch pricing), unlocking unlimited quotes, all Quote Style colors
-  and typefaces, and watermark-free Share Studio sharing. Keep faqs.json,
-  terms.html, press.html, and the homepage pricing strip in sync.
+- Pricing: free tier = 100 saved quotes; Premium = $2.49/month or $19.99/year,
+  unlocking unlimited quotes, all Quote Style colors and typefaces, and
+  watermark-free Share Studio sharing. Keep faqs.json, terms.html, press.html,
+  and the homepage pricing strip in sync.
 
 ## Quote Unquote editions (`quote-unquote/<n>-<slug>.html`)
 

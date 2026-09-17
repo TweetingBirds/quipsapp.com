@@ -1,6 +1,6 @@
 # Terms and Conditions
 
-**Effective Date:** July 7, 2026 | **Last Updated:** July 7, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** September 17, 2026
 
 > **In simple terms:**
 >
@@ -133,7 +133,7 @@ You may not:
 
 ### Subscription Options
 
-- Quips offers two auto-renewing Premium subscription options: **monthly ($0.99/month)** and **annual ($8.99/year)**
+- Quips offers two auto-renewing Premium subscription options: **monthly ($2.49/month)** and **annual ($19.99/year)**
 - Pricing may vary by region, promotion, or over time; the price shown on the App Store listing and within the App at the time of purchase is the price you will be charged
 
 ### Refunds
