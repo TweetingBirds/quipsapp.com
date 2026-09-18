@@ -38,7 +38,7 @@ Quips is a mobile application that allows users to:
 
 - Create, store, and organize personal quotations
 - Organize quotes into Private Collections and tag them by author or topic
-- Browse and save from 80+ curated Public Collections
+- Browse and save from 90+ curated Public Collections
 - Search and filter quotes
 - Customize app appearance with themes and colors
 - Turn quotes into shareable images with Share Studio
