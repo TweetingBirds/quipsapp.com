@@ -1,12 +1,13 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** July 7, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** September 17, 2026
 
 > **In simple terms:**
 >
 > - Your quotes stay on your device
 > - Your data is backed up to your personal iCloud account
-> - The Quips app doesn't collect data or track you, and doesn't use ads or analytics
+> - The Quips app has no ads, no tracking, and no analytics that watch what you do in it
+> - The app does send anonymous crash and performance reports, so we can find and fix bugs
 > - Daily Quote notifications are scheduled on your device — nothing is sent anywhere
 > - Our website sends your email to MailerLite only if you choose to sign up for our newsletter or email course
 > - Our website uses Cloudflare Web Analytics — cookieless, aggregate page counts that can't identify you
@@ -38,6 +39,9 @@ The App does not collect any personal information automatically. However, the fo
 
 - **iCloud Data:** If you enable iCloud sync, your quote data is synced to your personal iCloud account (managed by Apple, not us)
 - **Purchase Information:** If you make in-app purchases, transaction data is processed by Apple through the App Store (we do not have access to your payment information)
+- **Crash and Performance Diagnostics:** If the App crashes, freezes, or runs slowly, it sends a diagnostic report to Sentry — see [Crash and Performance Reporting](#crash-reporting) below
+
+This is the complete list. Nothing else leaves your device without you asking it to.
 
 ### Information We Do NOT Collect (In the App)
 
@@ -46,8 +50,13 @@ Within the Quips app itself, we want to be clear about what we don't collect:
 - The App does not collect your name, email address, or contact information
 - The App does not track your location
 - The App does not collect device identifiers for tracking purposes
-- The App does not use third-party analytics or advertising services
+- The App does not use advertising networks, ad tracking, or an advertising identifier
+- The App does not use product-analytics services that record what you tap, read, or save
 - We do not sell your data to third parties
+
+The App does record some of its own usage events — which card style you shared with, how many quotes you imported — but these are written only to the device's system log, where they are readable in a developer tool attached to your own Mac. They are never uploaded, and we never see them.
+
+Crash and performance diagnostics are the one thing the App does send, and they are described in full in [Crash and Performance Reporting](#crash-reporting).
 
 The optional Daily Quote feature uses local notifications that are scheduled entirely on your device. If you turn it on, the App picks a quote from your own library and asks iOS to show it at your chosen time — no data leaves your device, and we never know whether you use the feature.
 
@@ -146,12 +155,23 @@ We use the following Apple services:
 1. **App Store / StoreKit:** For in-app purchases and subscriptions (subject to [Apple's Privacy Policy](https://www.apple.com/legal/privacy/))
 2. **iCloud / CloudKit:** For optional data synchronization (subject to [Apple's iCloud Privacy Policy](https://www.apple.com/legal/privacy/))
 
-### No Other Third Parties
+### Crash and Performance Reporting {#crash-reporting}
 
-- We do not use analytics services (e.g., Google Analytics, Firebase) within the App
+The App uses **Sentry** to report crashes and performance problems, so we can find and fix them. This is diagnostics, not analytics: it tells us that something broke, not what you were reading or saving when it did.
+
+What a report contains: the type of crash or slowdown, where in our code it happened, the device model, and the operating-system and app versions. What it never contains: your quotes, authors, tags, notes, collections, settings, name, or email address. We configure the Sentry SDK with personally identifying information switched off, so it does not attach your IP address to a report.
+
+Reports are not linked to your identity, and are never used to track you or to build a profile of you. Performance reports are sampled — most sessions send nothing at all. Diagnostics are sent only from the version of the App you install from the App Store; builds we run during development report nothing.
+
+This is what the App's privacy label on the App Store declares as Crash Data and Performance Data, and it is the only information the App reports about your use of it. (Downloading public content — Collections, announcements, these legal documents — also produces ordinary server request logs at our hosting providers, described under [Website](#website-newsletter) above.) See [Sentry's Privacy Policy](https://sentry.io/privacy/) for details.
+
+### No Advertising or Tracking
+
 - We do not use advertising networks
 - We do not integrate social media tracking
 - We do not share data with third-party marketing companies
+- We do not use analytics services (e.g., Google Analytics, Firebase) within the App
+- Sentry is the only company the App reports data to, and it receives diagnostics only — never your content
 
 Our website uses three third-party services, described in [Website](#website-newsletter) above: MailerLite (solely to operate the optional newsletter and email-course signups), Cloudflare Web Analytics (cookieless, aggregate page metrics), and Google Fonts (typeface delivery). None of them are used for advertising or cross-site tracking.
 
@@ -160,6 +180,7 @@ Our website uses three third-party services, described in [Website](#website-new
 - **Local Data:** Retained on your device until you delete the App or manually delete quotes
 - **iCloud Data:** Retained in your iCloud account according to your iCloud settings and Apple's retention policies
 - **Purchase History:** Managed by Apple and retained according to Apple's policies
+- **Crash and Performance Diagnostics:** Retained by Sentry on our behalf for up to 90 days, then deleted
 - **Newsletter and Course Signups:** Kept in MailerLite until you unsubscribe or ask us to delete your information — email [feedback@quipsapp.com](mailto:feedback@quipsapp.com) and we will remove you from our list
 
 ## International Data Transfers
@@ -169,6 +190,7 @@ If you use the App outside your country of residence:
 - Your data is stored locally on your device
 - If using iCloud, data may be transferred to iCloud servers in various regions
 - iCloud data transfers are managed by Apple according to their privacy policy
+- Crash and performance diagnostics are processed by Sentry, which may store them outside your country of residence
 
 ## Changes to This Privacy Policy
 

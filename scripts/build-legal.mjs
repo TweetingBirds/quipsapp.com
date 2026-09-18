@@ -9,7 +9,8 @@
 //
 // Supported Markdown subset (deliberately small — matches what the app's
 // native renderer needs and what these two documents actually use):
-//   # / ## / ###   headings (optionally `## Heading {#custom-id}`)
+//   # / ## / ###   headings (optionally `## Heading {#custom-id}`; an
+//                  explicit id works on ## and ### alike)
 //   blank-line-separated paragraphs (a single `\n` inside one becomes <br>)
 //   - item                unordered lists
 //   1. item               ordered lists
@@ -157,7 +158,7 @@ function renderBlocks(blocks) {
                 case 'h2':
                     return `<h2${block.id ? ` id="${block.id}"` : ''}>${block.html}</h2>`;
                 case 'h3':
-                    return `<h3>${block.html}</h3>`;
+                    return `<h3${block.id ? ` id="${block.id}"` : ''}>${block.html}</h3>`;
                 case 'p':
                     return `<p${block.lastUpdated ? ' class="last-updated"' : ''}>${block.html}</p>`;
                 case 'ul':
