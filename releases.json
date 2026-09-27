@@ -33,7 +33,7 @@
         },
         {
           "title": "Room to Spread Out",
-          "detail": "Give Quips a bigger window and it uses the space: the sidebar comes out, and your library sits beside the quote you're reading. Make it small and it tidies back to a single column. Your iPad gets the full layout in portrait as well as landscape."
+          "detail": "Give Quips a bigger window and it uses the space: the sidebar comes out, and your library sits beside the quote you're reading. Make it small and it tidies back to a single column. Your iPad gets the full layout in portrait as well as landscape, and so does a big iPhone turned on its side."
         },
         {
           "title": "Everything in the Sidebar",
@@ -48,6 +48,10 @@
           "detail": "Change your mind. Deleting a quote, writing one, editing one or favoriting one can all be taken back — Command-Z, or a shake on iPhone."
         },
         {
+          "title": "Select and File",
+          "detail": "Select a handful of quotes and drag them onto a collection in the sidebar to file them. Hold Option as you drop to move them out of the one they came from."
+        },
+        {
           "title": "Discover, Rebuilt",
           "detail": "Discover is a place you go to now, on every platform. Search finds the words inside the quotes rather than just the collection names, a new collection is featured each week, and you can share something you found without keeping it.",
           "link": {
@@ -58,6 +62,10 @@
         {
           "title": "See Where a Quote Came From",
           "detail": "Every quote in Discover tells you how solid its attribution is — Verified, Widely attributed, Folk wisdom or Unconfirmed — on the card as well as on the quote's own screen."
+        },
+        {
+          "title": "Tags That Come With the Quote",
+          "detail": "Save a quote from Discover and its topics come with it as tags. Search Discover for “grief” or “eulogy” and you'll find quotes that never use the word."
         },
         {
           "title": "Everything by One Author, in One Place",
@@ -74,6 +82,14 @@
         {
           "title": "A New Default Look",
           "detail": "Quotes start in the Subtle style, the app wears Cyan to match its icon, and there are sixteen app icons to choose from — including Chevron and Paper, which change more than the color."
+        },
+        {
+          "title": "Backups That Keep Your Collections",
+          "detail": "Exporting your library now saves your collections along with your quotes, including the empty ones."
+        },
+        {
+          "title": "A Tip Jar",
+          "detail": "If you'd like to say thanks, there's a Tip Jar in Settings. Tips don't unlock anything."
         }
       ]
     },
