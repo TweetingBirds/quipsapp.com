@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** September 17, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 2, 2026
 
 > **In simple terms:**
 >
@@ -9,6 +9,7 @@
 > - The Quips app has no ads, no tracking, and no analytics that watch what you do in it
 > - The app does send anonymous crash and performance reports, so we can find and fix bugs
 > - Daily Quote notifications are scheduled on your device — nothing is sent anywhere
+> - Suggestions are made on your device by Apple's built-in models — your quotes aren't sent anywhere to make them
 > - Our website sends your email to MailerLite only if you choose to sign up for our newsletter or email course
 > - Our website uses Cloudflare Web Analytics — cookieless, aggregate page counts that can't identify you
 > - We don't sell your data
@@ -59,6 +60,8 @@ The App does record some of its own usage events — which card style you shared
 Crash and performance diagnostics are the one thing the App does send, and they are described in full in [Crash and Performance Reporting](#crash-reporting).
 
 The optional Daily Quote feature uses local notifications that are scheduled entirely on your device. If you turn it on, the App picks a quote from your own library and asks iOS to show it at your chosen time — no data leaves your device, and we never know whether you use the feature.
+
+The App's suggestions — suggested tags, filling in a quote's author and source from text you paste or share, Share Studio styles, related quotes, search by meaning, and Tidy Library — are made on your device by the models built into Apple's operating system. Your quotes are not sent to us or to anyone else to make them, and we never see what was suggested or what you accepted. Share Studio illustrations are created in Image Playground, Apple's own system feature; the App opens it with a short description of a scene rather than your quote, and what Image Playground does with it is covered by [Apple's Privacy Policy](https://www.apple.com/legal/privacy/).
 
 Our website is different: if you choose to sign up for our newsletter or free email course, we do collect the email address (and optionally the name) you provide, in order to send you those emails, and the website uses cookieless aggregate analytics. See [Website](#website-newsletter) below for details.
 
