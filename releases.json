@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-09-07",
+  "lastUpdated": "2026-10-03",
   "highlight": {
     "title": "Quips, Now on Mac and iPad",
     "summary": "Version 2.0 rebuilds Discover, gives your authors, tags and sources screens of their own, and lets you undo a delete, an edit, even a favorite.",
@@ -23,7 +23,7 @@
     {
       "version": "2.0",
       "name": "Quips Comes to the Mac and iPad",
-      "date": "September 2026",
+      "date": "October 2026",
       "latest": true,
       "summary": "Keep your library on your Mac, your iPad and your phone, and get the same Quips on each — roomier where there's room, simple where there isn't. Browse a rebuilt Discover, see how solid a quote's attribution is before you save it, and take back almost anything you do.",
       "features": [
@@ -72,8 +72,36 @@
           "detail": "Authors, tags, sources and collections each have a screen of their own now, gathering every quote filed under them — with a little about the author or the source at the top."
         },
         {
+          "title": "Illustrated Backgrounds",
+          "detail": "Choose Illustration as a card's background and Image Playground opens with a scene written for the quote's mood. Keep a picture you like and it sits behind the words."
+        },
+        {
+          "title": "Related Quotes",
+          "detail": "Open a quote and underneath it you'll find a few others from your library that say something similar. And when a search finds little by its words, Quips adds the quotes that are similar in meaning."
+        },
+        {
+          "title": "Suggested Tags",
+          "detail": "As you write a quote down, Quips offers a few tags for it, starting with the ones you already use. Tap one to add it."
+        },
+        {
+          "title": "Smart Capture",
+          "detail": "Paste or share a quote with its credit still attached and Quips moves the author and the source into their own fields, with an Undo in case it guessed wrong. Highlights from Apple Books and Kindle are read on every device; other credits need Apple Intelligence."
+        },
+        {
+          "title": "Tidy Library",
+          "detail": "With Premium, Tidy Library looks through your library and suggests tags for the quotes that have none, and new collections for quotes that belong together."
+        },
+        {
           "title": "A New Pin Format",
           "detail": "A 2:3 Pin format joins Square, Portrait, Story and Wide. On the Mac, Share Studio opens in a window of its own with the controls alongside."
+        },
+        {
+          "title": "Suggest a Style",
+          "detail": "In Share Studio, Suggest a Style picks a template, colors and a typeface to suit the quote's mood. Tap it again for a different idea, or undo to go back."
+        },
+        {
+          "title": "Made on Your Device",
+          "detail": "Suggested tags, Suggest a Style, illustrations and Tidy Library appear where Apple Intelligence is available. Suggestions are made on your device by Apple's built-in models — your quotes aren't sent anywhere to make them."
         },
         {
           "title": "Spotlight",
