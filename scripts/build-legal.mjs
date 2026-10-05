@@ -338,7 +338,7 @@ function pageHtml({ title, metaDescription, socialDescription, canonicalPath, co
                     </button>
                     <div class="nav-dropdown" id="navDropdown">
                         <a href="collections.html" class="nav-dropdown-item">Collections</a>
-                        <a href="course.html" class="nav-dropdown-item">Email Course</a>
+                        <!-- Email Course hidden until launch: <a href="course.html" class="nav-dropdown-item">Email Course</a> -->
                         <a href="support.html" class="nav-dropdown-item">Support</a>
                         <a href="releases.html" class="nav-dropdown-item">What's New</a>
                         <a href="press.html" class="nav-dropdown-item">Press Kit</a>
