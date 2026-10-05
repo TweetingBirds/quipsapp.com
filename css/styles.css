@@ -1996,7 +1996,7 @@ a {
 /* =========================================================================
    Homepage relaunch additions (2026-07)
    Hero eyebrow, Coming Soon pill, secondary button, feature-card link,
-   featured collection of the week, testimonials, pricing strip, FAQ.
+   featured collection of the week, pricing strip, FAQ.
    ========================================================================= */
 
 /* Hero eyebrow kicker */
@@ -2506,63 +2506,6 @@ a {
     color: inherit;
     border-radius: 3px;
     padding: 0 0.12em;
-}
-
-/* ===== Testimonials (social proof) ===== */
-.testimonials {
-    padding: var(--section-padding) 0;
-    background-color: var(--bg-secondary);
-}
-
-.testimonials-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-    margin-top: 3rem;
-}
-
-@media (min-width: 768px) {
-    .testimonials-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-.testimonial-card {
-    display: flex;
-    flex-direction: column;
-    margin: 0;
-    background-color: var(--bg-primary);
-    border-radius: var(--card-radius);
-    padding: 2rem;
-    box-shadow: var(--shadow-sm);
-}
-
-.testimonial-quote {
-    font-family: 'Baskerville', 'Libre Baskerville', Georgia, serif;
-    font-style: italic;
-    font-size: 1.0625rem;
-    line-height: 1.7;
-    color: var(--text-primary);
-    margin: 0 0 1.25rem;
-}
-
-.testimonial-quote::before {
-    content: "\201C";
-}
-
-.testimonial-quote::after {
-    content: "\201D";
-}
-
-.testimonial-attribution {
-    margin-top: auto;
-    font-size: 0.875rem;
-    font-weight: 500;
-    color: var(--text-muted);
-}
-
-.testimonial-attribution::before {
-    content: "\2014\00a0";
 }
 
 /* ===== Pricing strip (inside the #download CTA) ===== */
