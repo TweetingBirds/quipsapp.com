@@ -249,7 +249,7 @@ ${itemListJsonLd}
                         <a href="/collections.html" class="nav-dropdown-item">Collections</a>
                         <a href="/releases.html" class="nav-dropdown-item">What's New</a>
                         <a href="/quote-unquote.html" class="nav-dropdown-item">Quote Unquote</a>
-                        <!-- Email Course hidden until launch: <a href="/course.html" class="nav-dropdown-item">Email Course</a> -->
+                        <a href="/course.html" class="nav-dropdown-item">Email Course</a>
                         <a href="/support.html" class="nav-dropdown-item">Support</a>
                         <a href="/press.html" class="nav-dropdown-item">Press Kit</a>
                         <div class="nav-dropdown-divider"></div>
@@ -355,7 +355,7 @@ ${quotes.map(quoteItemHtml).join('\n')}
 const STATIC_PAGES = [
     '', // homepage -> https://quipsapp.com/
     'collections.html',
-    // 'course.html', // hidden until the email course launches
+    'course.html',
     'quote-unquote.html',
     'quote-unquote/1-jobs.html',
     'quote-unquote/2-crocker.html',
