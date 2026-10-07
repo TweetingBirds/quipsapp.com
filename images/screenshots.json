@@ -33,6 +33,15 @@
       "frameCanvas": "2560x1664",
       "maxWidth": 1600,
       "comment": "No simulator: the Mac shots are window captures produced by quotebook-ios/bin/mac-screenshot, which builds and runs the real app. Every mac entry is 'managed': false so bin/screenshots never overwrites them. Framed, but not by frameit — it declines a Mac outright (TemplateFinder returns nil for one, and its MacEditor composites onto a background rather than into a bezel). bin/mac-screenshot composites instead, using the MacBook bezel and offsets that ship in the same pinned frameit set the iPhone and iPad bezels come from. frameName is the key in that set's offsets.json, which supplies the paste offset and the aperture width; frameCanvas is the aperture the window is laid onto, and is the MacBook Air's own 2560x1664 display. A window capture is a floating window of arbitrary size, so it is scaled to fit and centred on a plain desktop first — nothing here crops or stretches it."
+    },
+    {
+      "id": "iphone-duo",
+      "label": "iPhone Duo",
+      "device": "iPhone Duo",
+      "capture": "manual",
+      "frame": true,
+      "maxWidth": 1100,
+      "comment": "Captured from the iPhone Duo simulator (iOS 27.1, Xcode 27.1 RC) at 9:41, one run per appearance, into quips-marketing/appstore/raw/iphone-duo/ by hand: the inner display comes back black from XCTest, so the pictures are `simctl io --display 3` (inner) and `--display 1` (cover). There is no frameit bezel for the Duo, so each PNG is a ButterKit render of its iPhone Duo body on a transparent background, trimmed to the device; 'managed': false keeps bin/screenshots from touching them. The open and half-open poses are ~1.1-1.2:1 and the closed phone is portrait, so an entry can name a 'variant' and the page gives that variant its own width (is-iphone-duo-closed)."
     }
   ],
   "gallery": [
@@ -184,6 +193,78 @@
       "alt": "The Share Studio window on Mac, composing a quote image",
       "light": "quips-mac-share-studio-light-min.png",
       "dark": "quips-mac-share-studio-dark-min.png",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "main",
+      "label": "Your Quotes",
+      "alt": "The Quips library on iPhone Duo, with the sidebar beside the quote list",
+      "light": "quips-duo-main-light-min.png",
+      "dark": "quips-duo-main-dark-min.png",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "public-collections",
+      "label": "Discover",
+      "alt": "Discover on iPhone Duo, browsing curated public collections",
+      "light": "quips-duo-discover-light-min.png",
+      "dark": "quips-duo-discover-dark-min.png",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "share-studio",
+      "label": "Share Studio",
+      "alt": "Share Studio on iPhone Duo, composing a square quote image",
+      "light": "quips-duo-share-studio-light-min.png",
+      "dark": "quips-duo-share-studio-dark-min.png",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "search",
+      "label": "Search",
+      "alt": "Search on iPhone Duo, filtering quotes as the query is typed",
+      "light": "quips-duo-search-light-min.png",
+      "dark": "quips-duo-search-dark-min.png",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "quote-style",
+      "label": "Quote Style",
+      "alt": "The Quote Style settings screen on iPhone Duo",
+      "light": "quips-duo-style-light-min.png",
+      "dark": "quips-duo-style-dark-min.png",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "half-open",
+      "label": "Half Open",
+      "alt": "Quips on an iPhone Duo held half open, the quote list bending across the hinge",
+      "light": "quips-duo-half-open-light-min.png",
+      "dark": "quips-duo-half-open-dark-min.png",
+      "variant": "half-open",
+      "optimize": true,
+      "managed": false
+    },
+    {
+      "platform": "iphone-duo",
+      "source": "closed",
+      "label": "Closed",
+      "alt": "Quips on the outer display of a closed iPhone Duo, showing the quote list",
+      "light": "quips-duo-closed-light-min.png",
+      "dark": "quips-duo-closed-dark-min.png",
+      "variant": "closed",
       "optimize": true,
       "managed": false
     }

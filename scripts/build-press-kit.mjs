@@ -74,7 +74,7 @@ const factSheet = [
     '                glyph — not a recolour. Use it on dark grounds.',
     'brand/          Wordmark and icon+wordmark lockup (SVG, outlined —',
     '                no font needed to render them correctly)',
-    'screenshots/    Marketing screenshots, light + dark, foldered by platform (iphone/, ipad/, mac/)',
+    'screenshots/    Marketing screenshots, light + dark, foldered by platform (iphone/, ipad/, mac/, iphone-duo/)',
     'quips-social-preview.png  1200x630 social/OG image',
     '',
     'The wordmark is Libre Baskerville, supplied as outlines rather than live',
