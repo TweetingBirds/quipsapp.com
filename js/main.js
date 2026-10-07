@@ -304,6 +304,9 @@
         img.alt = screen.alt || screen.label || 'Quips screenshot';
         img.loading = 'lazy';
         img.className = `gallery-screenshot screenshot-${mode} is-${group.id}`;
+        // A pose that is not the platform's usual shape (the Duo's closed and
+        // half-open shots) names a variant, which the stylesheet sizes separately.
+        if (screen.variant) img.classList.add(`is-${group.id}-${screen.variant}`);
         // Framed shots carry their own bezel and shadow in the PNG; unframed
         // ones (iPad, Mac) get the rounded corner and shadow from CSS, which
         // would double up if applied to a bezel. Framing is the default —

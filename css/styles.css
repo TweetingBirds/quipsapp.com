@@ -605,6 +605,24 @@ a {
     width: 340px;
 }
 
+/* The Duo's open pose is a 1.4:1 landscape shot like the iPad's, so it takes the
+   iPad's width ladder scaled to stand about as tall as the iPad beside it. Its other
+   two poses are cut from the same renders but are not that shape — the half-open
+   fold is nearer square and the closed phone is a portrait sliver — so each names a
+   `variant` in the manifest and gets a width that lands at the same on-screen height
+   instead of being stretched to the open pose's width. */
+.gallery-screenshot.is-iphone-duo {
+    width: 300px;
+}
+
+.gallery-screenshot.is-iphone-duo-half-open {
+    width: 260px;
+}
+
+.gallery-screenshot.is-iphone-duo-closed {
+    width: 150px;
+}
+
 @media (min-width: 768px) {
     .screenshots-row {
         gap: 2rem;
@@ -621,6 +639,18 @@ a {
     .gallery-screenshot.is-mac {
         width: 520px;
     }
+
+    .gallery-screenshot.is-iphone-duo {
+        width: 410px;
+    }
+
+    .gallery-screenshot.is-iphone-duo-half-open {
+        width: 350px;
+    }
+
+    .gallery-screenshot.is-iphone-duo-closed {
+        width: 205px;
+    }
 }
 
 @media (min-width: 1024px) {
@@ -634,6 +664,18 @@ a {
 
     .gallery-screenshot.is-mac {
         width: 660px;
+    }
+
+    .gallery-screenshot.is-iphone-duo {
+        width: 515px;
+    }
+
+    .gallery-screenshot.is-iphone-duo-half-open {
+        width: 450px;
+    }
+
+    .gallery-screenshot.is-iphone-duo-closed {
+        width: 265px;
     }
 }
 
