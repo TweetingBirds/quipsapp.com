@@ -1,6 +1,6 @@
 # Terms and Conditions
 
-**Effective Date:** July 7, 2026 | **Last Updated:** September 17, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 12, 2026
 
 > **In simple terms:**
 >
@@ -18,9 +18,9 @@
 
 ## Agreement to Terms
 
-By downloading, installing, or using the Quips mobile application ("App"), you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree to these Terms, do not use the App.
+By downloading, installing, or using the Quips application for iPhone, iPad, and Mac ("App"), you agree to be bound by these Terms and Conditions ("Terms"). If you do not agree to these Terms, do not use the App.
 
-These Terms constitute a legally binding agreement between you ("User," "you," or "your") and Tweeting Birds ("we," "us," or "our").
+These Terms constitute a legally binding agreement between you ("User," "you," or "your") and Tweeting Birds LLC ("Tweeting Birds," "we," "us," or "our").
 
 ## Changes to Terms
 
@@ -34,18 +34,22 @@ Your continued use of the App after changes constitutes acceptance of the modifi
 
 ## Description of Service
 
-Quips is a mobile application that allows users to:
+Quips is an application for iPhone, iPad, and Mac that allows users to:
 
 - Create, store, and organize personal quotations
-- Organize quotes into Private Collections and tag them by author or topic
-- Browse and save from 90+ curated Public Collections
+- Organize quotes into Private Collections and tag them by author, source, or topic
+- Browse and save from 90+ curated Public Collections in Discover
 - Search and filter quotes
 - Customize app appearance with themes and colors
 - Turn quotes into shareable images with Share Studio
-- Add Home Screen widgets that display your quotes
+- Add Home Screen, Lock Screen, and desktop widgets that display your quotes
 - Enable optional Daily Quote notifications
-- Optionally sync data across devices using iCloud
+- Receive optional on-device suggestions on devices that support Apple Intelligence
+- Import and export your library as a file
+- Optionally sync data across your devices using iCloud
 - Access premium features through in-app purchases
+
+Some features depend on the capabilities of your device or operating system and may not be available on every device or platform. For example, alternate app icons, the share extension, and Widget Studio are available on iPhone and iPad but not on Mac.
 
 ## Acceptable Use
 
@@ -90,7 +94,7 @@ Quips is a mobile application that allows users to:
 - Your content is stored locally on your device
 - If you enable iCloud sync, your content is stored in your personal iCloud account
 - We do not have access to your content
-- You are responsible for backing up your content
+- You are responsible for backing up your content; you can export a copy of your library at any time from Settings > Import & Export
 
 ## Intellectual Property Rights
 
@@ -102,7 +106,7 @@ All content, features, and functionality of the App are owned by Tweeting Birds 
 
 Subject to your compliance with these Terms, we grant you a limited, non-exclusive, non-transferable, revocable license to:
 
-- Download and install the App on devices you own or control
+- Download and install the App on Apple devices you own or control
 - Use the App for personal, non-commercial purposes
 
 ### Restrictions
@@ -121,7 +125,7 @@ You may not:
 
 - All in-app purchases and subscriptions are processed through the Apple App Store
 - Purchases are subject to Apple's standard terms and conditions
-- Payment is charged to your iTunes Account at confirmation of purchase
+- Payment is charged to your Apple Account at confirmation of purchase
 - All prices are in U.S. dollars (or local currency equivalent)
 
 ### Subscription Auto-Renewal
@@ -135,6 +139,13 @@ You may not:
 
 - Quips offers two auto-renewing Premium subscription options: **monthly ($2.49/month)** and **annual ($19.99/year)**
 - Pricing may vary by region, promotion, or over time; the price shown on the App Store listing and within the App at the time of purchase is the price you will be charged
+- A Premium subscription applies to the App on iPhone, iPad, and Mac when you are signed in with the same Apple Account
+
+### Tip Jar
+
+- The App offers optional one-time tips as a way to support its development
+- Tips are voluntary and do not unlock any features, content, or subscription benefits
+- Tips are consumable purchases processed by Apple and are subject to Apple's refund policies
 
 ### Refunds
 
@@ -151,13 +162,18 @@ You may not:
 
 ## Premium Features
 
+The free version of the App includes up to 100 saved quotes, search, Share Studio, widgets, one Public Collection, and one Daily Quote schedule.
+
 Premium subscriptions unlock:
 
-- Unlimited quotes (free users limited to 100 saved quotes)
-- Full access to all theme colors and favorite icons
-- Custom app icon selection
+- Unlimited quotes
 - All Quote Style colors and typefaces
 - Watermark-free sharing in Share Studio
+- Up to 10 Daily Quote schedules (iPhone and iPad only)
+- Full access to all theme colors and favorite icons
+- Custom app icon selection (iPhone and iPad only)
+- Up to 25 Private Collections and 100 Public Collections
+- Tidy Library suggestions (requires a device that supports Apple Intelligence)
 - Future premium features as they become available
 
 We reserve the right to modify, add, or remove premium features with notice to subscribers.
@@ -182,7 +198,27 @@ We reserve the right to modify, add, or remove premium features with notice to s
 
 - You can disable iCloud sync in your device settings
 - Disabling sync does not delete existing iCloud data
-- You must manage iCloud data separately through iOS Settings
+- You must manage iCloud data separately through Settings on iPhone or iPad, or System Settings on Mac
+
+## Apple Intelligence and Suggestions
+
+### On-Device Suggestions
+
+On devices that support Apple Intelligence, the App can offer suggestions such as tags, the author and source of a quote, Share Studio styles, and Tidy Library organization. These suggestions are generated on your device by Apple's built-in models; your quotes are not sent to us.
+
+### Illustrated Backgrounds
+
+Share Studio can use Apple's Image Playground to create illustrations for quote cards. Image Playground is provided by Apple, and your use of it is subject to Apple's terms and conditions.
+
+### Accuracy of Suggestions
+
+- Suggestions and generated images are produced automatically and may be inaccurate, incomplete, or unsuitable
+- You are responsible for reviewing any suggestion before accepting it and for any image you choose to share
+- Availability depends on your device, operating system, language, region, and settings, and may change without notice
+
+## Attribution Information
+
+Quotes in Public Collections are labeled with our assessment of how well their attribution is supported (for example, Verified, Widely attributed, Folk wisdom, or Unconfirmed). These labels reflect our good-faith research at the time of publication and are provided for information only. We do not guarantee that any quote, attribution, or source is accurate or complete.
 
 ## Data and Privacy
 
@@ -260,6 +296,12 @@ You agree to indemnify, defend, and hold harmless Tweeting Birds, its officers, 
 - Apple is not responsible for the App or its content
 - Apple has no obligation to provide support for the App
 
+### Apple Intelligence / Image Playground
+
+- Optional suggestions and illustrations use Apple Intelligence and Image Playground on supported devices
+- Subject to Apple's terms and conditions
+- Apple is responsible for the availability and operation of these services
+
 ### iCloud / CloudKit
 
 - Optional iCloud sync uses Apple's CloudKit service
@@ -279,7 +321,7 @@ You agree to indemnify, defend, and hold harmless Tweeting Birds, its officers, 
 
 You may stop using the App at any time by:
 
-- Deleting the App from your device
+- Deleting the App from your devices
 - Canceling your subscription (if applicable)
 - Disabling iCloud sync
 
@@ -326,15 +368,49 @@ You acknowledge that:
 - Apple has no obligation to provide support or maintenance
 - Apple is not responsible for any warranty claims
 
+### Scope of License
+
+The license granted to you under these Terms is limited to using the App on Apple-branded products that you own or control, as permitted by the Usage Rules in the Apple Media Services Terms and Conditions, except that the App may be accessed and used by other accounts associated with you through Family Sharing or volume purchasing.
+
+### Maintenance and Support
+
+Tweeting Birds is solely responsible for providing any maintenance and support for the App, as described in these Terms or as required by applicable law. Apple has no obligation whatsoever to furnish any maintenance or support services for the App.
+
+### Warranty
+
+Tweeting Birds is solely responsible for any product warranties, whether express or implied by law, to the extent not effectively disclaimed. If the App fails to conform to any applicable warranty, you may notify Apple, and Apple will refund the purchase price for the App to you. To the maximum extent permitted by applicable law, Apple will have no other warranty obligation whatsoever with respect to the App, and any other claims, losses, liabilities, damages, costs or expenses attributable to any failure to conform to any warranty will be the sole responsibility of Tweeting Birds.
+
+### Product Claims
+
+Tweeting Birds, not Apple, is responsible for addressing any claims by you or any third party relating to the App or your possession and use of the App, including but not limited to: (i) product liability claims; (ii) any claim that the App fails to conform to any applicable legal or regulatory requirement; and (iii) claims arising under consumer protection, privacy, or similar legislation.
+
+### Intellectual Property Claims
+
+In the event of any third-party claim that the App or your possession and use of the App infringes that third party's intellectual property rights, Tweeting Birds, not Apple, will be solely responsible for the investigation, defense, settlement and discharge of any such intellectual property infringement claim.
+
+### Legal Compliance
+
+You represent and warrant that (i) you are not located in a country that is subject to a U.S. Government embargo, or that has been designated by the U.S. Government as a "terrorist supporting" country; and (ii) you are not listed on any U.S. Government list of prohibited or restricted parties.
+
+### Third-Party Terms of Agreement
+
+You must comply with applicable third-party terms of agreement when using the App, such as your wireless data service agreement.
+
+### Developer Name and Address
+
+Questions, complaints or claims with respect to the App should be directed to Tweeting Birds LLC, 511 Black Canyon Park, Canton, GA 30114, United States, or [feedback@quipsapp.com](mailto:feedback@quipsapp.com).
+
 ### Third-Party Beneficiary
 
 Apple and its subsidiaries are third-party beneficiaries of these Terms and may enforce these Terms against you.
 
 ### Device Requirements
 
-- Requires a currently supported version of iOS / iPadOS; see the App Store listing for the current minimum requirement
-- Compatible with iPhone, iPad, and Mac
-- Requires internet connection for iCloud sync and in-app purchases
+- iPhone and iPad: requires iOS / iPadOS 27 or later
+- Mac: requires macOS 27 or later
+- Minimum requirements may change with future updates; see the App Store listing for the current requirements
+- On-device suggestions and illustrated backgrounds require a device that supports Apple Intelligence, with Apple Intelligence turned on
+- Requires an internet connection for iCloud sync, Discover, and in-app purchases
 
 ## Dispute Resolution
 
@@ -389,6 +465,11 @@ Provisions regarding intellectual property, disclaimers, limitations of liabilit
 ## Contact Information
 
 For questions about these Terms or the App, contact us:
+
+**Tweeting Birds LLC**
+511 Black Canyon Park
+Canton, GA 30114
+United States
 
 **Email:** [feedback@quipsapp.com](mailto:feedback@quipsapp.com)
 **Website:** [https://quipsapp.com](https://quipsapp.com)
