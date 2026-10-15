@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 // Build script: renders the Save to Quips landing pages.
 //
-//   /save/q/<id>   one page per quote in newsletter-picks.json (the Quote Unquote
-//                  featured quotes), the target of each issue's "Save to Quips" button
+//   /save/q/<id>   one page per collection quote (the target of each Quote Unquote
+//                  issue's "Save to Quips" button; newsletter-picks.json adds the issue number)
 //   /save/         the page for `https://quipsapp.com/save?text=...` links, which fills
 //                  itself from the query string in the browser
 //
@@ -14,8 +14,8 @@
 // the profile the app's Quote Markup spec publishes, so these pages are its first
 // real-world example.
 //
-// Output is gitignored (`/save/`). Reads newsletter-picks.json, which CI pulls from
-// data.quipsapp.com before this runs; with no feed the build still writes /save/.
+// Output is gitignored (`/save/`). Reads collections/ and newsletter-picks.json, which CI
+// pulls from data.quipsapp.com before this runs; with no data the build still writes /save/.
 // Run locally with: node scripts/build-save-pages.mjs
 
 import fs from 'node:fs';
@@ -200,19 +200,35 @@ function write(file, contents) {
 fs.rmSync(OUT, { recursive: true, force: true });
 write(path.join(OUT, 'index.html'), queryPage());
 
-let count = 0;
+// Every collection quote gets a page, not only the sent Newsletter Picks: an issue's email
+// is built while the issue is still `scheduled`, when the picks feed does not carry it yet,
+// and its Save to Quips link has to work from the moment it goes out. The picks feed only
+// adds the issue number.
+const issueByQuote = new Map();
 const feedPath = path.join(ROOT, 'newsletter-picks.json');
 if (fs.existsSync(feedPath)) {
     const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
-    for (const quote of feed.quotes || []) {
-        if (!SAFE_ID.test(quote.id || '') || !quote.content) {
-            console.warn(`build-save-pages: skipping quote with unusable id/content: ${quote.id}`);
-            continue;
+    for (const quote of feed.quotes || []) issueByQuote.set(quote.id, quote.newsletterIssue);
+}
+
+let count = 0;
+const collectionsDir = path.join(ROOT, 'collections');
+if (fs.existsSync(collectionsDir)) {
+    for (const name of fs.readdirSync(collectionsDir).sort()) {
+        if (!name.endsWith('.json')) continue;
+        const collection = JSON.parse(fs.readFileSync(path.join(collectionsDir, name), 'utf8'));
+        for (const quote of collection.quotes || []) {
+            if (!SAFE_ID.test(quote.id || '') || !quote.content) {
+                console.warn(`build-save-pages: skipping quote with unusable id/content: ${quote.id}`);
+                continue;
+            }
+            const issue = issueByQuote.get(quote.id);
+            write(path.join(OUT, 'q', `${quote.id}.html`),
+                quotePage(issue ? { ...quote, newsletterIssue: issue } : quote));
+            count += 1;
         }
-        write(path.join(OUT, 'q', `${quote.id}.html`), quotePage(quote));
-        count += 1;
     }
 } else {
-    console.warn('build-save-pages: newsletter-picks.json not found; wrote /save/ only');
+    console.warn('build-save-pages: collections/ not found; wrote /save/ only');
 }
 console.log(`build-save-pages: wrote /save/ and ${count} quote page(s)`);
