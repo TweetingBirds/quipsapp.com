@@ -3034,6 +3034,12 @@ a {
     color: var(--text-secondary);
 }
 
+/* "Save to Quips" under the featured quote: opens the app, or a landing page without it */
+.qu-quote-save {
+    margin: 1.75rem 0 0;
+    text-align: center;
+}
+
 /* References / footnotes */
 .qu-refs {
     max-width: 640px;
