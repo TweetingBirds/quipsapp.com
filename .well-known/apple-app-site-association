@@ -1,0 +1,17 @@
+{
+  "applinks": {
+    "details": [
+      {
+        "appIDs": [
+          "7AL8RCKX3J.com.tweetingbirds.quips",
+          "7AL8RCKX3J.com.tweetingbirds.quips.dev"
+        ],
+        "components": [
+          { "/": "/save", "comment": "Save to Quips, fields in the query string" },
+          { "/": "/save/", "comment": "Same, with the trailing slash" },
+          { "/": "/save/q/*", "comment": "Save to Quips, a quote Quips already knows" }
+        ]
+      }
+    ]
+  }
+}

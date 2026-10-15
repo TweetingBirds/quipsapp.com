@@ -230,9 +230,24 @@ jobs:
       - name: Build legal pages from Markdown
         run: node scripts/build-legal.mjs
 
-      - uses: actions/upload-pages-artifact@v5
+      - name: Build Save to Quips landing pages
+        run: node scripts/build-save-pages.mjs
+
+      # Not `actions/upload-pages-artifact`: since v4 it leaves out dotfiles, which
+      # would drop `.well-known/apple-app-site-association` — the file iOS fetches to
+      # open /save links in the app. This is that action's own packaging, minus the
+      # exclusion, uploaded under the name `deploy-pages` expects.
+      - name: Archive site, keeping .well-known
+        run: |
+          tar --dereference --hard-dereference --directory . \
+            --exclude=.git --exclude=.github \
+            -cf "$RUNNER_TEMP/artifact.tar" .
+      - uses: actions/upload-artifact@v4
         with:
-          path: .
+          name: github-pages
+          path: ${{ runner.temp }}/artifact.tar
+          retention-days: 1
+          if-no-files-found: error
 
   deploy:
     needs: build

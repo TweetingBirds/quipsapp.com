@@ -41,7 +41,7 @@
         // Pageviews of this page in Cloudflare Web Analytics = badge clicks.
         var APP_STORE_BASE = 'https://apps.apple.com/app/idXXXXXXXXXX?pt=TODO';
 
-        var ALLOWED_PLACEMENTS = ['hero', 'cta', 'nav', 'collection'];
+        var ALLOWED_PLACEMENTS = ['hero', 'cta', 'nav', 'collection', 'save'];
         var param = new URLSearchParams(window.location.search).get('p');
         var placement = ALLOWED_PLACEMENTS.indexOf(param) !== -1 ? param : 'site';
         var url = APP_STORE_BASE + '&ct=website-' + placement;
