@@ -3088,6 +3088,61 @@ a {
     text-decoration: none;
 }
 
+/* Image lightbox (js/main.js initLightbox): a thumbnail link that opens the full image. */
+.qu-scan {
+    display: block;
+    width: 120px;
+    margin-top: 0.75rem;
+    line-height: 0;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    overflow: hidden;
+    cursor: zoom-in;
+}
+
+.qu-scan img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.lightbox {
+    max-width: min(92vw, 720px);
+    max-height: 92vh;
+    padding: 0;
+    border: 0;
+    border-radius: 8px;
+    background: var(--bg-secondary);
+    overflow: auto;
+}
+
+.lightbox::backdrop {
+    background: rgba(0, 0, 0, 0.75);
+}
+
+.lightbox-image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.lightbox-close {
+    position: sticky;
+    top: 0.5rem;
+    float: right;
+    margin: 0.5rem 0.5rem 0 0;
+    width: 2.25rem;
+    height: 2.25rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-size: 1.5rem;
+    line-height: 1;
+    cursor: pointer;
+    z-index: 1;
+}
+
 /* Save-to-Quips CTA box */
 .qu-save-cta {
     max-width: 640px;
