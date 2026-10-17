@@ -230,6 +230,9 @@ jobs:
       - name: Build legal pages from Markdown
         run: node scripts/build-legal.mjs
 
+      - name: Build Quote Markup spec page
+        run: node scripts/build-spec.mjs
+
       - name: Build Save to Quips landing pages
         run: node scripts/build-save-pages.mjs
 

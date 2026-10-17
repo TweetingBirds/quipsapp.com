@@ -58,6 +58,9 @@ node scripts/build-press-kit.mjs
 echo "Rebuilding terms.html/privacy.html from legal/*.md"
 node scripts/build-legal.mjs
 
+echo "Rebuilding spec/quote-markup.html from spec/quote-markup.md"
+node scripts/build-spec.mjs
+
 echo "Serving http://localhost:${PORT}  (Ctrl+C to stop)"
 # no-store so browsers never serve stale css/js while iterating locally
 exec python3 -c "
