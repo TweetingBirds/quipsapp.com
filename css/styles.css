@@ -3034,10 +3034,30 @@ a {
     color: var(--text-secondary);
 }
 
-/* "Save to Quips" under the featured quote: opens the app, or a landing page without it */
+/* "Add quote to Quips" under the featured quote: opens the app, or a landing page without it.
+   Two artworks, switched by the site's theme class like the screenshots above. */
 .qu-quote-save {
     margin: 1.75rem 0 0;
     text-align: center;
+}
+
+.qu-add-quote {
+    display: inline-block;
+    line-height: 0;
+    border-radius: 7.5px;
+}
+
+.qu-add-quote img {
+    display: block;
+}
+
+.qu-add-quote .qu-add-quote-dark,
+.dark-theme .qu-add-quote .qu-add-quote-light {
+    display: none;
+}
+
+.dark-theme .qu-add-quote .qu-add-quote-dark {
+    display: block;
 }
 
 /* References / footnotes */
