@@ -363,7 +363,8 @@ const STATIC_PAGES = [
     'releases.html',
     'press.html',
     'privacy.html',
-    'terms.html'
+    'terms.html',
+    'spec/quote-markup.html'
 ];
 
 function sitemapXml(collectionIds) {

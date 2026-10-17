@@ -456,4 +456,8 @@ function main() {
     }
 }
 
-main();
+// build-spec.mjs imports `pageHtml` for the shared chrome, so only build when run directly.
+export { pageHtml, escapeHtml };
+if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+    main();
+}

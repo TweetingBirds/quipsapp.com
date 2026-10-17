@@ -22,6 +22,7 @@ the Email Course nav item, press.html had a different footer encoding, etc.).
 | `press.html` | Press kit | |
 | `privacy.html` | Privacy policy | **Generated** by `scripts/build-legal.mjs` from `legal/privacy.md` — never hand-edit; edit the Markdown |
 | `terms.html` | Terms & conditions | **Generated** by `scripts/build-legal.mjs` from `legal/terms.md` — never hand-edit; edit the Markdown |
+| `spec/quote-markup.html` | Quote Markup spec | **Generated** by `scripts/build-spec.mjs` from `spec/quote-markup.md` — edit the Markdown. Reuses the legal pages' shell |
 | `404.html` | GitHub Pages not-found page | `noindex`; all paths root-absolute (it renders at any missing URL depth) |
 
 ## Canonical `<head>` requirements (every page)
