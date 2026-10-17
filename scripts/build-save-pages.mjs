@@ -107,12 +107,25 @@ ${body}
 `;
 }
 
-const ACTIONS = `        <div class="actions">
-            <a class="button" href="/go/appstore.html?p=save">Get Quips</a>
+// "Open in Quips" is a quips:// link because a Universal Link tapped on a quipsapp.com page
+// opens Safari, not the app, so this page is where someone who has the app lands. It fills
+// the Add Quote editor from the quote's own fields.
+function actions(openHref) {
+    return `        <div class="actions">
+            <a class="button" id="open-in-app" href="${openHref}">Open in Quips</a>
+            <a class="button secondary" href="/go/appstore.html?p=save">Get Quips</a>
             <button class="button secondary" id="copy-quote" type="button">Copy quote</button>
         </div>
         <p class="note">Quips saves quotes with their source, and checks whether the attribution holds up.
-        Already have it? Open this link on your iPhone, iPad or Mac and the quote opens in the app.</p>`;
+        Already have it? Choose Open in Quips to review and save the quote.</p>`;
+}
+
+function openHref(quote) {
+    const q = new URLSearchParams({ content: quote.content, author: quote.authorName || '' });
+    if (quote.source) q.set('source', quote.source);
+    if (quote.quoteDate) q.set('date', String(quote.quoteDate));
+    return escapeHtml(`quips://add?${q.toString().replace(/\+/g, '%20')}`);
+}
 
 function quotePage(quote) {
     const date = quote.quoteDate ? String(quote.quoteDate) : '';
@@ -138,7 +151,7 @@ function quotePage(quote) {
                 (<time class="dt-published" datetime="${escapeHtml(year)}">${escapeHtml(year)}</time>)` : ''}
             </figcaption>
         </figure>
-${ACTIONS}${issue}`;
+${actions(openHref(quote))}${issue}`;
 
     return page({
         title: `${quote.authorName}: Save to Quips`,
@@ -158,7 +171,7 @@ const QUERY_BODY = `        <figure class="h-cite" id="quote" hidden>
         </figure>
         <p id="empty">This link doesn't carry a quote. <a href="/">Explore Quips</a>.</p>
         <div id="actions" hidden>
-${ACTIONS}
+${actions('quips://add')}
         </div>`;
 
 const QUERY_SCRIPT = `
@@ -177,6 +190,10 @@ const QUERY_SCRIPT = `
         var credit = (parts.length ? '\\u2014 ' + parts.join(', ') : '') + (date ? ' (' + date + ')' : '');
         document.getElementById('text').textContent = text;
         document.getElementById('credit').textContent = credit;
+        var open = new URLSearchParams({ content: text, author: author });
+        if (work) open.set('source', work);
+        if (date) open.set('date', date);
+        document.getElementById('open-in-app').href = 'quips://add?' + open.toString().replace(/\\+/g, '%20');
         document.getElementById('quote').hidden = false;
         document.getElementById('actions').hidden = false;
         document.getElementById('empty').hidden = true;
