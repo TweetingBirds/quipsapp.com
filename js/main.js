@@ -563,6 +563,48 @@
         initCourseForm();
         initHomeFaq();
         initDeepLinkBadges();
+        initLightbox();
+    }
+
+    // Image lightbox: <a data-lightbox="id" href="full.jpg"><img thumb></a> opens the
+    // full image in a dialog, and #id in the URL opens it on load (the email deep link).
+    // Without JS the link just opens the image.
+    function initLightbox() {
+        const links = document.querySelectorAll('a[data-lightbox]');
+        if (!links.length || typeof HTMLDialogElement === 'undefined') return;
+
+        const dialog = document.createElement('dialog');
+        dialog.className = 'lightbox';
+        dialog.setAttribute('aria-label', 'Enlarged image');
+        dialog.innerHTML = '<button type="button" class="lightbox-close" aria-label="Close">&times;</button><img class="lightbox-image" alt="">';
+        document.body.appendChild(dialog);
+        const image = dialog.querySelector('.lightbox-image');
+
+        function open(link) {
+            const thumb = link.querySelector('img');
+            image.src = link.href;
+            image.alt = thumb ? thumb.alt : '';
+            if (!dialog.open) dialog.showModal();
+            dialog.scrollTop = 0;
+        }
+
+        function openFromHash() {
+            const id = decodeURIComponent(location.hash.slice(1));
+            const link = id && document.querySelector('a[data-lightbox="' + CSS.escape(id) + '"]');
+            if (link) open(link);
+        }
+
+        links.forEach(link => link.addEventListener('click', event => {
+            event.preventDefault();
+            open(link);
+        }));
+        dialog.addEventListener('click', () => dialog.close());
+        dialog.addEventListener('close', () => {
+            image.removeAttribute('src');
+            if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+        });
+        window.addEventListener('hashchange', openFromHash);
+        openFromHash();
     }
 
     // Run when DOM is ready
