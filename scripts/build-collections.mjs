@@ -359,6 +359,7 @@ const STATIC_PAGES = [
     'quote-unquote.html',
     'quote-unquote/1-jobs.html',
     'quote-unquote/2-crocker.html',
+    'quote-unquote/3-ulrich.html',
     'support.html',
     'releases.html',
     'press.html',
