@@ -1,0 +1,85 @@
+[
+ {
+  "template": "01-speech-bubble",
+  "format": "story",
+  "out": "2026-10-22-instagram-story-hall.png",
+  "fields": {
+   "eyebrow": "Quote Unquote",
+   "number": "#3",
+   "quote": "“I disapprove of what you say, but I will defend to the death your right to say it.”",
+   "author": "Evelyn Beatrice Hall, not Voltaire",
+   "source": "The Friends of Voltaire, 1906"
+  }
+ },
+ {
+  "template": "08-catalog-card",
+  "format": "pin",
+  "out": "2026-10-22-pinterest-pin-hall.png",
+  "fields": {
+   "eyebrow": "Quote Unquote · Issue 3",
+   "category": "Quips / Courage & Conviction",
+   "ref": "Ref. courage-014",
+   "quote": "“I disapprove of what you say, but I will defend to the death your right to say it.”",
+   "author": "Evelyn Beatrice Hall",
+   "source": "The Friends of Voltaire (as S. G. Tallentyre)",
+   "year": "1906",
+   "status": "Verified"
+  }
+ },
+ {
+  "template": "10-carousel-cover",
+  "format": "feed",
+  "accent": "#FF6B6B",
+  "out": "2026-10-23-instagram-carousel-hall-1.png",
+  "fields": {
+   "series": "Quote Unquote · Issue 3",
+   "page": "1 / 4",
+   "number": "Not",
+   "headline": "Voltaire. His biographer wrote it.",
+   "cta": "Swipe"
+  }
+ },
+ {
+  "template": "03-quote-check",
+  "format": "feed",
+  "out": "2026-10-23-instagram-carousel-hall-2.png",
+  "fields": {
+   "eyebrow": "QUOTE CHECK",
+   "number": "#3",
+   "quote": "“I disapprove of what you say, but I will defend to the death your right to say it.”",
+   "wrong_label": "OFTEN CREDITED TO",
+   "wrong_name": "Voltaire",
+   "right_label": "ACTUALLY WRITTEN BY",
+   "right_name": "Evelyn Beatrice Hall",
+   "right_note": "The Friends of Voltaire, 1906",
+   "tagline": "Not found in anything Voltaire wrote"
+  }
+ },
+ {
+  "template": "06-highlighter",
+  "format": "feed",
+  "out": "2026-10-23-instagram-carousel-hall-3.png",
+  "fields": {
+   "eyebrow": "What she meant",
+   "quote": "“‘I disapprove of what you say…’ was his attitude now.”",
+   "highlight": "was his attitude now",
+   "author": "Evelyn Beatrice Hall",
+   "source": "Summing up Voltaire, not quoting him"
+  }
+ },
+ {
+  "template": "08-catalog-card",
+  "format": "feed",
+  "out": "2026-10-23-instagram-carousel-hall-4.png",
+  "fields": {
+   "eyebrow": "From the Quips catalog",
+   "category": "Quips / Courage & Conviction",
+   "ref": "Ref. courage-014",
+   "quote": "“I disapprove of what you say, but I will defend to the death your right to say it.”",
+   "author": "Evelyn Beatrice Hall",
+   "source": "The Friends of Voltaire, written as S. G. Tallentyre",
+   "year": "1906",
+   "status": "Verified"
+  }
+ }
+]
