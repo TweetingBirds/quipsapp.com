@@ -233,6 +233,9 @@ jobs:
       - name: Build Quote Markup spec page
         run: node scripts/build-spec.mjs
 
+      - name: Check Save to Quips page dates
+        run: node scripts/check-save-pages.mjs
+
       - name: Build Save to Quips landing pages
         run: node scripts/build-save-pages.mjs
 

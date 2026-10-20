@@ -16,7 +16,9 @@
 //
 // Output is gitignored (`/save/`). Reads collections/ and newsletter-picks.json, which CI
 // pulls from data.quipsapp.com before this runs; with no data the build still writes /save/.
-// Run locally with: node scripts/build-save-pages.mjs
+// Run locally with: node scripts/build-save-pages.mjs. scripts/check-save-pages.mjs imports
+// the page functions to check their dates, so the build only runs when this file is the
+// script node was started with.
 
 import fs from 'node:fs';
 import path from 'node:path';
@@ -42,6 +44,36 @@ function escapeHtml(text) {
 function jsonLd(value) {
     return JSON.stringify(value, null, 2).replace(/</g, '\\u003c');
 }
+
+// quoteDate comes in many shapes: "1997", "1933-03-04", "c. 1906", "c. 431 BCE",
+// "c. 4th century BCE", "c. 1950s-1960s". The credit shows it as written. Only an ISO 8601
+// date, full or partial (what the Quote Markup spec allows in dt-published), also goes into
+// <time datetime> and the JSON-LD; the other shapes have no honest machine-readable value.
+const ISO_DATE = /^\d{4}(-\d{2}(-\d{2})?)?$/;
+
+function machineDate(date) {
+    return ISO_DATE.test(date) ? date : '';
+}
+
+// Many sources already carry the date in parentheses: "Pooh's Grand Adventure: The Search
+// for Christopher Robin (1997)", "Meditations, Book 2 (c. 170-180 CE)", "Laelius de
+// Amicitia, VI.20 (44 BC)", "The Friends of Voltaire (1906), written under ...". Printing
+// it again after one of those reads as a typo. The date is compared without its "c." or
+// era, and a full date by its year.
+function sourceHasDate(source, date) {
+    if (!source || !date) return false;
+    const core = date.replace(/^c\.\s*/i, '').replace(/\s*\b(BCE|CE|BC|AD)$/i, '').replace(/^(\d{4})-\d{2}(-\d{2})?$/, '$1');
+    const escaped = core.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    return new RegExp(`\\([^()]*(?<!\\w)${escaped}(?!\\w)[^()]*\\)`).test(source);
+}
+
+// The dates the query page passes on to quips://add. Anyone can write a /save link, and
+// Quips 2.0 and 2.1 trap on an overflowing century ("99999999999999999th century"), so only
+// the shapes a person writes for a quote's date get through: a year of up to four digits
+// with an optional era, YYYY-MM or YYYY-MM-DD, a decade ("1950s") or a one- or two-digit
+// century ("4th century BCE"), each optionally after "c.". Anything else is left out of the
+// app link; the page still shows it.
+export const APP_DATE = /^(?:c\.\s*)?(?:\d{4}-\d{2}(?:-\d{2})?|(?:\d{1,4}|\d{3}0s|\d{1,2}(?:st|nd|rd|th)\s+century)(?:\s*(?:BCE|CE|BC|AD))?)$/i;
 
 const STYLE = `
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -72,8 +104,17 @@ const COPY_SCRIPT = `
             var text = document.querySelector('blockquote').textContent.trim();
             var credit = document.getElementById('credit').textContent.trim();
             var full = '\\u201C' + text + '\\u201D ' + credit;
+            // Some in-app mail browsers have no Clipboard API, or refuse it. Select the
+            // quote instead, so a long-press or Command-C copies it.
+            function selectInstead() {
+                var selection = window.getSelection && window.getSelection();
+                if (selection) selection.selectAllChildren(document.querySelector('figure'));
+                button.textContent = 'Select the text to copy';
+            }
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(full).then(function () { button.textContent = 'Copied'; });
+                navigator.clipboard.writeText(full).then(function () { button.textContent = 'Copied'; }, selectInstead);
+            } else {
+                selectInstead();
             }
         });
     })();`;
@@ -109,15 +150,16 @@ ${body}
 
 // "Open in Quips" is a quips:// link because a Universal Link tapped on a quipsapp.com page
 // opens Safari, not the app, so this page is where someone who has the app lands. It fills
-// the Add Quote editor from the quote's own fields.
+// the Add Quote editor from the quote's own fields. Without the app it errors or does
+// nothing, hence "(if installed)".
 function actions(openHref) {
     return `        <div class="actions">
-            <a class="button" id="open-in-app" href="${openHref}">Open in Quips</a>
+            <a class="button" id="open-in-app" href="${openHref}">Open in Quips (if installed)</a>
             <a class="button secondary" href="/go/appstore.html?p=save">Get Quips</a>
             <button class="button secondary" id="copy-quote" type="button">Copy quote</button>
         </div>
         <p class="note">Quips saves quotes with their source, and checks whether the attribution holds up.
-        Already have it? Choose Open in Quips to review and save the quote.</p>`;
+        Already have it? Choose Open in Quips to review and save the quote. <a href="/support.html">What is this?</a></p>`;
 }
 
 function openHref(quote) {
@@ -127,9 +169,19 @@ function openHref(quote) {
     return escapeHtml(`quips://add?${q.toString().replace(/\+/g, '%20')}`);
 }
 
-function quotePage(quote) {
-    const date = quote.quoteDate ? String(quote.quoteDate) : '';
-    const year = date.slice(0, 4);
+export function quotePage(quote) {
+    const date = quote.quoteDate ? String(quote.quoteDate).trim() : '';
+    const iso = machineDate(date);
+    // When the source already shows the date, an ISO value still goes in as an empty
+    // <time>, so microformats readers keep it.
+    let dateHtml = '';
+    if (date && !sourceHasDate(quote.source, date)) {
+        dateHtml = iso
+            ? `\n                (<time class="dt-published" datetime="${escapeHtml(iso)}">${escapeHtml(date)}</time>)`
+            : `\n                (${escapeHtml(date)})`;
+    } else if (iso) {
+        dateHtml = `<time class="dt-published" datetime="${escapeHtml(iso)}"></time>`;
+    }
     const credit = [quote.authorName, quote.source].filter(Boolean).join(', ');
     const canonical = `${SITE}/save/q/${quote.id}`;
     const issue = quote.newsletterIssue
@@ -141,14 +193,13 @@ function quotePage(quote) {
         text: quote.content,
         creator: { '@type': 'Person', name: quote.authorName },
     };
-    if (quote.source) ld.isPartOf = { '@type': 'CreativeWork', name: quote.source, ...(year ? { datePublished: year } : {}) };
+    if (quote.source) ld.isPartOf = { '@type': 'CreativeWork', name: quote.source, ...(iso ? { datePublished: iso } : {}) };
 
     const body = `        <figure class="h-cite">
             <blockquote class="p-content">${escapeHtml(quote.content)}</blockquote>
             <figcaption id="credit">
                 &mdash; <span class="p-author h-card">${escapeHtml(quote.authorName)}</span>${quote.source ? `,
-                <cite class="p-name">${escapeHtml(quote.source)}</cite>` : ''}${year ? `
-                (<time class="dt-published" datetime="${escapeHtml(year)}">${escapeHtml(year)}</time>)` : ''}
+                <cite class="p-name">${escapeHtml(quote.source)}</cite>` : ''}${dateHtml}
             </figcaption>
         </figure>
 ${actions(openHref(quote))}${issue}`;
@@ -192,14 +243,14 @@ const QUERY_SCRIPT = `
         document.getElementById('credit').textContent = credit;
         var open = new URLSearchParams({ content: text, author: author });
         if (work) open.set('source', work);
-        if (date) open.set('date', date);
+        if (${APP_DATE}.test(date.trim())) open.set('date', date.trim());
         document.getElementById('open-in-app').href = 'quips://add?' + open.toString().replace(/\\+/g, '%20');
         document.getElementById('quote').hidden = false;
         document.getElementById('actions').hidden = false;
         document.getElementById('empty').hidden = true;
     })();` + COPY_SCRIPT;
 
-function queryPage() {
+export function queryPage() {
     return page({
         title: 'Save to Quips',
         canonical: `${SITE}/save/`,
@@ -214,38 +265,42 @@ function write(file, contents) {
     fs.writeFileSync(file, contents);
 }
 
-fs.rmSync(OUT, { recursive: true, force: true });
-write(path.join(OUT, 'index.html'), queryPage());
+function build() {
+    fs.rmSync(OUT, { recursive: true, force: true });
+    write(path.join(OUT, 'index.html'), queryPage());
 
-// Every collection quote gets a page, not only the sent Newsletter Picks: an issue's email
-// is built while the issue is still `scheduled`, when the picks feed does not carry it yet,
-// and its Save to Quips link has to work from the moment it goes out. The picks feed only
-// adds the issue number.
-const issueByQuote = new Map();
-const feedPath = path.join(ROOT, 'newsletter-picks.json');
-if (fs.existsSync(feedPath)) {
-    const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
-    for (const quote of feed.quotes || []) issueByQuote.set(quote.id, quote.newsletterIssue);
-}
-
-let count = 0;
-const collectionsDir = path.join(ROOT, 'collections');
-if (fs.existsSync(collectionsDir)) {
-    for (const name of fs.readdirSync(collectionsDir).sort()) {
-        if (!name.endsWith('.json')) continue;
-        const collection = JSON.parse(fs.readFileSync(path.join(collectionsDir, name), 'utf8'));
-        for (const quote of collection.quotes || []) {
-            if (!SAFE_ID.test(quote.id || '') || !quote.content) {
-                console.warn(`build-save-pages: skipping quote with unusable id/content: ${quote.id}`);
-                continue;
-            }
-            const issue = issueByQuote.get(quote.id);
-            write(path.join(OUT, 'q', `${quote.id}.html`),
-                quotePage(issue ? { ...quote, newsletterIssue: issue } : quote));
-            count += 1;
-        }
+    // Every collection quote gets a page, not only the sent Newsletter Picks: an issue's email
+    // is built while the issue is still `scheduled`, when the picks feed does not carry it yet,
+    // and its Save to Quips link has to work from the moment it goes out. The picks feed only
+    // adds the issue number.
+    const issueByQuote = new Map();
+    const feedPath = path.join(ROOT, 'newsletter-picks.json');
+    if (fs.existsSync(feedPath)) {
+        const feed = JSON.parse(fs.readFileSync(feedPath, 'utf8'));
+        for (const quote of feed.quotes || []) issueByQuote.set(quote.id, quote.newsletterIssue);
     }
-} else {
-    console.warn('build-save-pages: collections/ not found; wrote /save/ only');
+
+    let count = 0;
+    const collectionsDir = path.join(ROOT, 'collections');
+    if (fs.existsSync(collectionsDir)) {
+        for (const name of fs.readdirSync(collectionsDir).sort()) {
+            if (!name.endsWith('.json')) continue;
+            const collection = JSON.parse(fs.readFileSync(path.join(collectionsDir, name), 'utf8'));
+            for (const quote of collection.quotes || []) {
+                if (!SAFE_ID.test(quote.id || '') || !quote.content) {
+                    console.warn(`build-save-pages: skipping quote with unusable id/content: ${quote.id}`);
+                    continue;
+                }
+                const issue = issueByQuote.get(quote.id);
+                write(path.join(OUT, 'q', `${quote.id}.html`),
+                    quotePage(issue ? { ...quote, newsletterIssue: issue } : quote));
+                count += 1;
+            }
+        }
+    } else {
+        console.warn('build-save-pages: collections/ not found; wrote /save/ only');
+    }
+    console.log(`build-save-pages: wrote /save/ and ${count} quote page(s)`);
 }
-console.log(`build-save-pages: wrote /save/ and ${count} quote page(s)`);
+
+if (process.argv[1] && fs.realpathSync(process.argv[1]) === fileURLToPath(import.meta.url)) build();
