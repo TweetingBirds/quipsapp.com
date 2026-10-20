@@ -104,8 +104,17 @@ const COPY_SCRIPT = `
             var text = document.querySelector('blockquote').textContent.trim();
             var credit = document.getElementById('credit').textContent.trim();
             var full = '\\u201C' + text + '\\u201D ' + credit;
+            // Some in-app mail browsers have no Clipboard API, or refuse it. Select the
+            // quote instead, so a long-press or Command-C copies it.
+            function selectInstead() {
+                var selection = window.getSelection && window.getSelection();
+                if (selection) selection.selectAllChildren(document.querySelector('figure'));
+                button.textContent = 'Select the text to copy';
+            }
             if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(full).then(function () { button.textContent = 'Copied'; });
+                navigator.clipboard.writeText(full).then(function () { button.textContent = 'Copied'; }, selectInstead);
+            } else {
+                selectInstead();
             }
         });
     })();`;
@@ -141,15 +150,16 @@ ${body}
 
 // "Open in Quips" is a quips:// link because a Universal Link tapped on a quipsapp.com page
 // opens Safari, not the app, so this page is where someone who has the app lands. It fills
-// the Add Quote editor from the quote's own fields.
+// the Add Quote editor from the quote's own fields. Without the app it errors or does
+// nothing, hence "(if installed)".
 function actions(openHref) {
     return `        <div class="actions">
-            <a class="button" id="open-in-app" href="${openHref}">Open in Quips</a>
+            <a class="button" id="open-in-app" href="${openHref}">Open in Quips (if installed)</a>
             <a class="button secondary" href="/go/appstore.html?p=save">Get Quips</a>
             <button class="button secondary" id="copy-quote" type="button">Copy quote</button>
         </div>
         <p class="note">Quips saves quotes with their source, and checks whether the attribution holds up.
-        Already have it? Choose Open in Quips to review and save the quote.</p>`;
+        Already have it? Choose Open in Quips to review and save the quote. <a href="/support.html">What is this?</a></p>`;
 }
 
 function openHref(quote) {
