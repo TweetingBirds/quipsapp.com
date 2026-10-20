@@ -249,7 +249,7 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
 ## Quote Unquote editions (`quote-unquote/<n>-<slug>.html`)
 
 Hand-authored from the Markdown drafts in the `quote-unquote` repo — there is
-no generator, so both conventions below have to be applied by hand on every new
+no generator, so the conventions below have to be applied by hand on every new
 edition.
 
 - **The feedback mailto carries a per-issue subject.** The closing line of the
@@ -267,6 +267,10 @@ edition.
   was applied inconsistently (the same page had identical standalone bold lines
   both boxed and unboxed), so its markup and CSS rule were removed outright.
   `<blockquote>` remains correct for quoting someone; the box is not.
+- **Back-to-back footnote markers share one superscript.** `[^1][^3]` in the
+  Markdown becomes `<sup>1, 3</sup>`, never `<sup>1</sup><sup>3</sup>`: two
+  touching superscripts read (and are announced) as note 13. The email builder,
+  `scripts/build_issue_email.py` in `quote-unquote`, merges them the same way.
 
 ## Screenshot gallery (`images/screenshots.json`)
 
