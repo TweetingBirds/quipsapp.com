@@ -535,6 +535,24 @@
         });
     }
 
+    // ===== Timestamp Guard =====
+    // <a hidden data-publish-at="2026-10-22T13:00:00Z"> stays hidden until that
+    // moment, so a link to an issue can merge before the issue is sent. It is
+    // revealed on load once the time has passed, or at that time if the page is
+    // still open. Without JS it stays hidden.
+    function initPublishGuards() {
+        document.querySelectorAll('[data-publish-at]').forEach(node => {
+            const at = Date.parse(node.dataset.publishAt);
+            if (isNaN(at)) return;
+            const wait = at - Date.now();
+            if (wait <= 0) {
+                node.hidden = false;
+            } else if (wait < 2147483647) {
+                setTimeout(() => { node.hidden = false; }, wait);
+            }
+        });
+    }
+
     // ===== Initialize =====
     function init() {
         // Theme
@@ -564,6 +582,7 @@
         initHomeFaq();
         initDeepLinkBadges();
         initLightbox();
+        initPublishGuards();
     }
 
     // Image lightbox: <a data-lightbox="id" href="full.jpg"><img thumb></a> opens the
