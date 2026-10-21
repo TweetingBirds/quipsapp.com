@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 12, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 20, 2026
 
 > **In simple terms:**
 >
@@ -57,8 +57,8 @@ This is the complete list. Nothing else leaves your device without you asking it
 Within the Quips app itself, we want to be clear about what we don't collect:
 
 - The App does not collect your name, email address, or contact information (we only see these if you email us)
-- The App does not track your location
-- The App does not access your contacts, photos, or camera
+- The App does not track your location, and it never uses your location, camera, microphone, or photo library in the background. A feature that needs one of them uses it only when you choose that feature, and only after your device asks your permission. Anything it captures is kept with that quote in your library, on your device (and in your iCloud account if iCloud is on for Quips), and we never receive it
+- The App does not access your contacts
 - The App does not collect device identifiers for tracking purposes
 - The App does not use advertising networks, ad tracking, or an advertising identifier
 - The App does not use product-analytics services that record what you tap, read, or save
