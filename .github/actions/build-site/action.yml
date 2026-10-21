@@ -1,0 +1,232 @@
+name: Build site
+description: >-
+  Validate the JSON data files, pull the pinned collections data, and run the
+  site's build and check scripts. Shared by deploy.yml (which then packages and
+  deploys the result) and pr-build.yml (which stops here), so a pull request
+  runs exactly the steps a deploy does. Run actions/checkout first.
+
+runs:
+  using: composite
+  steps:
+  - name: Validate JSON data files
+    run: |
+      set -euo pipefail
+      python3 - <<'PY'
+      import json
+      import sys
+      import datetime
+
+      errors = []
+
+      def load(path):
+          try:
+              with open(path, "r", encoding="utf-8") as f:
+                  return json.load(f)
+          except Exception as e:
+              errors.append(f"{path}: invalid JSON ({e})")
+              return None
+
+      # announcements.json - single in-app announcement banner, consumed by the iOS app.
+      ann = load("announcements.json")
+      if ann is not None:
+          for field in ("title", "content", "timestamp"):
+              if not isinstance(ann.get(field), str) or not ann.get(field):
+                  errors.append(f"announcements.json: missing/empty required field '{field}'")
+          ts = ann.get("timestamp")
+          if isinstance(ts, str):
+              try:
+                  datetime.datetime.fromisoformat(ts.replace("Z", "+00:00"))
+              except ValueError:
+                  errors.append(f"announcements.json: 'timestamp' is not a valid ISO-8601 datetime: {ts!r}")
+          link = ann.get("link")
+          if link is not None:
+              if not isinstance(link, dict):
+                  errors.append("announcements.json: 'link' must be an object")
+              else:
+                  for field in ("type", "url", "label"):
+                      if not isinstance(link.get(field), str) or not link.get(field):
+                          errors.append(f"announcements.json: link.{field} missing/empty")
+
+      # faqs.json - sections of FAQs shown on support.html and in the iOS app.
+      faqs = load("faqs.json")
+      if faqs is not None:
+          sections = faqs.get("sections")
+          if not isinstance(sections, list) or not sections:
+              errors.append("faqs.json: 'sections' must be a non-empty list")
+          else:
+              for s in sections:
+                  if not isinstance(s, dict) or not s.get("id") or not s.get("title"):
+                      errors.append(f"faqs.json: section missing id/title: {s!r}")
+                      continue
+                  items = s.get("faqs")
+                  if not isinstance(items, list) or not items:
+                      errors.append(f"faqs.json: section '{s.get('id')}' has no faqs")
+                      continue
+                  for item in items:
+                      for field in ("id", "question", "answer"):
+                          if not isinstance(item.get(field), str) or not item.get(field):
+                              errors.append(f"faqs.json: faq in section '{s.get('id')}' missing/empty '{field}'")
+
+      # releases.json - release notes rendered by releases.html and bundled in the
+      # iOS app, so the site and the app describe the same release.
+      rel = load("releases.json")
+      if rel is not None:
+          items = rel.get("releases")
+          if not isinstance(items, list) or not items:
+              errors.append("releases.json: 'releases' must be a non-empty list")
+          else:
+              seen = set()
+              for r in items:
+                  if not isinstance(r, dict):
+                      errors.append(f"releases.json: release is not an object: {r!r}")
+                      continue
+                  for field in ("version", "name", "date", "summary"):
+                      if not isinstance(r.get(field), str) or not r.get(field):
+                          errors.append(f"releases.json: release {r.get('version', r)!r} missing/empty '{field}'")
+                  version = r.get("version")
+                  if version in seen:
+                      errors.append(f"releases.json: duplicate version {version!r}")
+                  seen.add(version)
+                  rel_link = r.get("link")
+                  if rel_link is not None:
+                      if not isinstance(rel_link, dict):
+                          errors.append(f"releases.json: release {version!r} 'link' must be an object")
+                      else:
+                          for field in ("label", "href"):
+                              if not isinstance(rel_link.get(field), str) or not rel_link.get(field):
+                                  errors.append(f"releases.json: release {version!r} link missing/empty '{field}'")
+                  feats = r.get("features")
+                  if not isinstance(feats, list) or not feats:
+                      errors.append(f"releases.json: release {version!r} has no features")
+                      continue
+                  for feat in feats:
+                      if not isinstance(feat.get("detail"), str) or not feat.get("detail"):
+                          errors.append(f"releases.json: feature in {version!r} missing/empty 'detail'")
+                      link = feat.get("link")
+                      if link is not None:
+                          if not isinstance(link, dict):
+                              errors.append(f"releases.json: feature link in {version!r} must be an object")
+                          else:
+                              for field in ("label", "href"):
+                                  if not isinstance(link.get(field), str) or not link.get(field):
+                                      errors.append(f"releases.json: feature link in {version!r} missing/empty '{field}'")
+              flagged = [r for r in items if isinstance(r, dict) and r.get("latest")]
+              if len(flagged) != 1:
+                  errors.append(f"releases.json: expected exactly one release flagged 'latest', found {len(flagged)}")
+
+      # collections.json - manifest of public collections shown on collections.html
+      # and in the iOS app. It is NOT tracked in git: the pinned pull below
+      # creates it. Validate only if a local copy happens to exist.
+      import os
+      cols = load("collections.json") if os.path.exists("collections.json") else None
+      if cols is not None:
+          items = cols.get("collections")
+          if not isinstance(items, list) or not items:
+              errors.append("collections.json: 'collections' must be a non-empty list")
+          else:
+              for c in items:
+                  for field in ("id", "name", "quoteCount"):
+                      if field not in c:
+                          errors.append(f"collections.json: collection missing '{field}': {c.get('id', c)!r}")
+
+      if errors:
+          print("JSON validation failed:")
+          for e in errors:
+              print(f"  - {e}")
+          sys.exit(1)
+
+      validated = ["announcements.json", "faqs.json", "releases.json"] + (["collections.json"] if cols is not None else [])
+      print(f"JSON validation passed: {', '.join(validated)}")
+      PY
+    shell: bash
+
+  - name: Pull pinned collections from data.quipsapp.com
+    run: |
+      set -euo pipefail
+      VER="$(tr -d '[:space:]' < .data-version)"
+      BASE="https://data.quipsapp.com/v${VER}"
+      echo "Pulling collections v${VER} from ${BASE}"
+      curl -fsSL "${BASE}/collections.json" -o collections.json
+      mkdir -p collections
+      for id in $(python3 -c "import json;print('\n'.join(c['id'] for c in json.load(open('collections.json'))['collections']))"); do
+        curl -fsSL "${BASE}/collections/${id}.json" -o "collections/${id}.json"
+      done
+      echo "Pulled $(ls collections | wc -l) collection files."
+      # Generated cross-collection feeds (Recently Added / New Collections /
+      # On This Day / Newsletter Picks), the weekly featured collection
+      # schedule, and the site search index. Optional — a version may not
+      # publish them; the site degrades gracefully, so a missing feed is not
+      # a build failure. new-collections.json first ships in collections
+      # v1.14.0, so older pins simply skip it.
+      for feed in recently-added new-collections on-this-day newsletter-picks featured-collections search-index; do
+        if curl -fsSL "${BASE}/${feed}.json" -o "${feed}.json"; then
+          echo "Pulled ${feed}.json"
+        else
+          echo "No ${feed}.json for v${VER} (skipping)"
+          rm -f "${feed}.json"
+        fi
+      done
+    shell: bash
+
+  - name: Validate pulled collections data
+    run: |
+      set -euo pipefail
+      python3 - <<'PY'
+      import glob
+      import json
+      import sys
+
+      import os
+      errors = []
+      # Keep in sync with the pull loop above — a feed missing from this
+      # tuple is fetched but never JSON-validated, so a malformed one would
+      # reach the deployed site instead of failing the build.
+      optional = ("recently-added.json", "new-collections.json", "on-this-day.json",
+                  "newsletter-picks.json", "featured-collections.json", "search-index.json")
+      feeds = [f for f in optional if os.path.exists(f)]
+      for path in ["collections.json"] + sorted(glob.glob("collections/*.json")) + feeds:
+          try:
+              with open(path, "r", encoding="utf-8") as f:
+                  json.load(f)
+          except Exception as e:
+              errors.append(f"{path}: invalid JSON ({e})")
+
+      if errors:
+          print("Pulled collections data failed JSON validation:")
+          for e in errors:
+              print(f"  - {e}")
+          sys.exit(1)
+
+      print(f"Validated collections.json, all collections/*.json, and {len(feeds)} generated feed(s) pulled from data.quipsapp.com.")
+      PY
+    shell: bash
+
+  # Pin Node so the build doesn't drift with runner image updates
+  # (matches the Node 24 Pages-actions baseline from the CI bump in #11).
+  - uses: actions/setup-node@v7
+    with:
+      node-version: 24
+
+  - name: Build collection pages and sitemap
+    run: node scripts/build-collections.mjs
+    shell: bash
+
+  - name: Build press kit archive
+    run: node scripts/build-press-kit.mjs
+    shell: bash
+
+  - name: Build legal pages from Markdown
+    run: node scripts/build-legal.mjs
+    shell: bash
+
+  - name: Build Quote Markup spec page
+    run: node scripts/build-spec.mjs
+    shell: bash
+
+  - name: Check Save to Quips page dates
+    run: node scripts/check-save-pages.mjs
+    shell: bash
+
+  - name: Build Save to Quips landing pages
+    run: node scripts/build-save-pages.mjs
+    shell: bash
