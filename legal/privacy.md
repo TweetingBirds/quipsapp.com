@@ -1,13 +1,13 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 12, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 20, 2026
 
 > **In simple terms:**
 >
 > - Your quotes stay on your device
 > - If iCloud is on for Quips, your data syncs through your personal iCloud account, which we can't see
 > - The Quips app has no ads, no tracking, and no analytics that watch what you do in it
-> - The app does send anonymous crash and performance reports, so we can find and fix bugs
+> - The app does send crash and performance reports that aren't linked to you, so we can find and fix bugs
 > - If you email us for help, we see your email address, your message, and the device details the app fills in for you
 > - Daily Quote notifications are scheduled on your device — nothing is sent anywhere
 > - Suggestions are made on your device by Apple's built-in models — your quotes aren't sent anywhere to make them
@@ -192,7 +192,7 @@ The App uses **Sentry** to report crashes and performance problems, so we can fi
 
 What a report contains: the type of crash or slowdown, where in our code it happened, timing measurements, a short trail of recent technical events leading up to it (such as which screen was open or which of our own servers the App was contacting), technical device details (such as device model, available memory and storage, language and region settings, and the operating-system and app versions), and a random identifier that Sentry's software generates for this installation of the App so that repeated reports of the same problem can be grouped. What it never contains: your quotes, authors, tags, notes, collections, the text you type, your name, or your email address. We configure the Sentry SDK with personally identifying information switched off, so it does not attach your IP address to a report.
 
-Reports are not linked to your identity, and are never used to track you or to build a profile of you. Performance reports are sampled — most sessions send nothing at all. Diagnostics are sent only from release versions of the App — the App Store version and TestFlight betas; builds we run during development report nothing. Where the law requires a legal basis, we rely on our legitimate interest in keeping the App stable and working. The App does not currently have a setting to turn these reports off; because they contain none of your content and are not linked to you, we consider this a fair balance, but you may contact us with any objection.
+Reports are not linked to your identity or your account, and are never used to track you or to build a profile of you. Because each report carries the installation identifier, reports from the same installation can be grouped together, but the identifier is not connected to your name, your email address or any account. Performance reports are sampled, so only a fraction of what the App measures is ever sent, and a session in which nothing crashed or froze may send nothing at all. Sentry's session tracking, which would report each time the App is opened and how long it stays open, is switched off. Diagnostics are sent only from release versions of the App — the App Store version and TestFlight betas; builds we run during development report nothing. Where the law requires a legal basis, we rely on our legitimate interest in keeping the App stable and working. The App does not currently have a setting to turn these reports off; because they contain none of your content and are not linked to you, we consider this a fair balance, but you may contact us with any objection.
 
 This is what the App's privacy label on the App Store declares as Crash Data and Performance Data, and it is the only information the App reports about your use of it. (Downloading public content — Collections, announcements, these legal documents — also produces ordinary server request logs at our hosting providers, described under [Website](#website-newsletter) above.) See [Sentry's Privacy Policy](https://sentry.io/privacy/) for details.
 
