@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "lastUpdated": "2026-10-03",
+  "version": "2.1",
+  "lastUpdated": "2026-10-20",
   "highlight": {
     "title": "Quips, Now on Mac and iPad",
     "summary": "Version 2.0 rebuilds Discover, gives your authors, tags and sources screens of their own, and lets you undo a delete, an edit, even a favorite.",
@@ -21,10 +21,22 @@
   },
   "releases": [
     {
+      "version": "2.1",
+      "name": "Made for iPhone Duo",
+      "date": "October 2026",
+      "latest": true,
+      "summary": "Quips fills both of iPhone Duo's displays, with your library on one side and the quote you're reading on the other.",
+      "features": [
+        {
+          "title": "Made for iPhone Duo",
+          "detail": "Quips fills both displays. Unfold it to see your library beside the quote you're reading, and Share Studio puts the preview on one side and its controls on the other."
+        }
+      ]
+    },
+    {
       "version": "2.0",
       "name": "Quips Comes to the Mac and iPad",
       "date": "October 2026",
-      "latest": true,
       "summary": "Keep your library on your Mac, your iPad and your phone, and get the same Quips on each — roomier where there's room, simple where there isn't. Browse a rebuilt Discover, see how solid a quote's attribution is before you save it, and take back almost anything you do.",
       "features": [
         {
