@@ -2805,6 +2805,16 @@ a {
     margin-top: 1rem;
 }
 
+/* Shown when the address was prefilled from the email course link. */
+.qu-prefill-note {
+    font-size: 0.9375rem;
+    color: var(--text-secondary);
+    margin: 0.75rem 0 0;
+}
+.qu-prefill-note[hidden] {
+    display: none;
+}
+
 /* Article/landing body sections (mirrors .course-section) */
 .qu-section {
     padding: var(--section-padding) 0;

@@ -253,6 +253,20 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
   An email that fails a basic shape check gets the browser's own validation
   bubble. Never make the honeypot visible, remove its `aria-hidden`, or make it
   focusable.
+- **Course-to-newsletter prefill (`quote-unquote.html` only).** The course's
+  Day 7 email, and the footer of Day 1, link to
+  `https://quipsapp.com/quote-unquote.html#email={$email}`. A form with
+  `data-prefill="fragment"` reads `#email=` once, checks it with the same email
+  test as the form, sets the input's `.value` (never HTML), then removes the
+  fragment with `history.replaceState`, so no server, Referer, copied URL or
+  screenshot carries the address. An invalid value is ignored silently. A
+  `[data-prefill-note]` line near the form explains it, and nothing is sent until
+  the person taps Subscribe. A prefilled form skips the 3-second clock and
+  instead needs a trusted (`isTrusted`) tap, click or keypress inside the form;
+  a blank form keeps the clock. The success paragraph's
+  `data-prefilled-text` replaces its copy after a prefilled signup, because a
+  course reader is already a confirmed subscriber and MailerLite sends no second
+  confirmation to an active one. Don't add `data-prefill` to other pages.
 - Every email input needs an associated visually-hidden `<label>`
   (`class="sr-only"`), not just a placeholder.
 - Success copy must say "check your inbox to confirm" (double opt-in), since
