@@ -1,0 +1,68 @@
+name: Site PR build
+
+# Builds and checks the site on every pull request, without deploying it.
+#
+# deploy.yml only runs on a push to main, so before this a broken build script,
+# bad JSON, or a script that ran but emitted wrong pages (a broken Save link, say)
+# was found after the merge, with the pages already live. This runs the same
+# steps, from the same composite action (.github/actions/build-site), against the
+# PR's merge result: JSON validation, the pinned collections pull, and every
+# build and check script.
+#
+# Read-only on purpose: contents: read, no Pages permissions, no secrets, and
+# nothing is uploaded or deployed. The pinned data is public (data.quipsapp.com).
+#
+# Make "Site build" a required check under Settings -> Branches. There is
+# deliberately no `paths:` filter: a required check that is skipped for some PRs
+# never reports and blocks them.
+#
+# Caveat: a PR opened with the default GITHUB_TOKEN, such as the data-version
+# bump PRs from data-version-bump.yml, does not trigger workflows (a GitHub
+# rule), so those PRs get no run of this until someone pushes to them or the bump
+# workflow opens them with a PAT or app token.
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+# One run per PR; a new push cancels the stale one. Separate from deploy.yml's
+# `pages` group, which cancels in-progress deploys.
+concurrency:
+  group: site-pr-build-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  site-build:
+    name: Site build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+
+      - uses: ./.github/actions/build-site
+
+      # PR-only sanity check, not part of a deploy: assert that the outputs the
+      # live site depends on exist and are not empty, and log how many files the
+      # Save and spec directories got so a reviewer can see a surprise.
+      - name: Confirm the generated pages exist
+        shell: bash
+        run: |
+          set -euo pipefail
+          for f in privacy.html terms.html spec/quote-markup.html sitemap.xml \
+                   collections-stats.json images/quips-press-kit.zip; do
+            if [ ! -s "$f" ]; then
+              echo "::error::$f was not generated"
+              exit 1
+            fi
+          done
+          for d in save spec; do
+            echo "$d/: $(find "$d" -type f | wc -l) files"
+          done
+          if [ -z "$(find save -type f -name '*.html' -print -quit)" ]; then
+            echo "::error::save/ has no generated landing pages"
+            exit 1
+          fi
