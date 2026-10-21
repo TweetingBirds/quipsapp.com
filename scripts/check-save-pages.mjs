@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-// Checks the dates on the Save to Quips pages (scripts/build-save-pages.mjs) against the
+// Checks the Save to Quips pages (scripts/build-save-pages.mjs): the dates against the
 // shapes quoteDate takes in the collections, the query page's filter on the `date` it
-// passes to quips://add, and the link from a quote's page to its Quote Unquote issue: that
+// passes to quips://add, what the query page claims about a quote that came from a link
+// (it was not checked, and it carries no verification wording or citation markup), how it
+// fills itself from hostile query strings, and the link from a quote's page to its Quote Unquote issue: that
 // every issue page is matched to one quote, that each link lands on a file in this repo, and
 // that an unsent issue's link stays hidden until its time. Exits non-zero on the first failure.
 // CI runs it before the build.
@@ -62,20 +64,23 @@ for (const [quoteDate, source, text, machine] of quoteCases) {
     checks += 1;
 }
 
-// What the query page's own script puts in the Open in Quips link, run against stand-ins
-// for the few DOM pieces it touches.
-function forwardedDate(date) {
+// What the query page's own script does with a query string, run against stand-ins for the
+// few DOM pieces it touches. Returns the elements it filled in.
+function runQueryPage(params) {
     const script = queryPage().match(/<script>([\s\S]*?)<\/script>/)[1];
     const elements = {};
     const element = (id) => (elements[id] ??= { hidden: true, textContent: '', href: '', addEventListener() {} });
-    const search = '?' + new URLSearchParams({ text: 'Words.', author: 'Someone', date });
     vm.runInNewContext(script, {
-        window: { location: { search } },
+        window: { location: { search: '?' + new URLSearchParams(params) } },
         document: { getElementById: element, querySelector: () => ({ textContent: '' }) },
         navigator: {},
         URLSearchParams,
     });
-    const href = elements['open-in-app'].href;
+    return elements;
+}
+
+function forwardedDate(date) {
+    const href = runQueryPage({ text: 'Words.', author: 'Someone', date })['open-in-app'].href;
     assert.ok(href.startsWith('quips://add?'), `query page set no app link for date ${JSON.stringify(date)}`);
     return new URLSearchParams(href.slice('quips://add?'.length)).get('date');
 }
@@ -95,6 +100,57 @@ for (const date of dropped) {
     assert.equal(forwardedDate(date), null, `query page should drop ${JSON.stringify(date)}`);
     checks += 1;
 }
+
+// A quote that came from a link is the link author's claim. The page says so, and says nothing
+// about Quips having checked it: that sentence belongs to a quote from the collections.
+const CHECKS = /checks whether the attribution/i;
+const linkPage = queryPage();
+const collectionPage = quotePage({ id: 'check-001', content: 'Words.', authorName: 'Someone', source: 'A Source' });
+assert.ok(!CHECKS.test(linkPage), 'the query page must not say Quips checks attributions');
+assert.ok(CHECKS.test(collectionPage), 'the page of a collection quote keeps its sentence');
+assert.ok(!/\b(verified|widely attributed|folk wisdom)\b/i.test(linkPage.replace(/<style>[\s\S]*?<\/style>/, '')), 'the query page shows no verification wording');
+assert.match(linkPage, /<p class="origin">From the link you followed, not from the Quips collections\. Quips hasn't checked it\.<\/p>\s*<blockquote id="text"/,
+    'the origin label must sit directly above the quote');
+assert.match(linkPage, /<meta name="robots" content="noindex">/);
+assert.ok(!/h-cite|p-content|ld\+json/.test(linkPage), 'the query page is not a published citation');
+assert.ok(!/innerHTML|insertAdjacentHTML|document\.write/.test(linkPage), 'the query page fills in text only');
+assert.match(linkPage, /Open in Quips \(if installed\)/);
+checks += 8;
+
+// Hostile query strings. Every field reaches the page as text, the lengths are capped, the
+// bidi controls that can reorder text are not shown, and an empty author is passed on as empty.
+const hostile = '<script>alert(1)</script><img src=x onerror=alert(1)>"\'&amp;';
+let shown = runQueryPage({ text: hostile, author: hostile, work: hostile, character: hostile, date: hostile });
+assert.equal(shown.text.textContent, hostile);
+assert.equal(shown.credit.textContent, `\u2014 ${hostile}, ${hostile}, ${hostile} (${hostile})`);
+assert.equal(shown.quote.hidden, false);
+assert.equal(new URLSearchParams(shown['open-in-app'].href.slice('quips://add?'.length)).get('content'), hostile);
+assert.ok(shown['open-in-app'].href.startsWith('quips://add?'), 'a hostile field cannot change the link scheme');
+
+shown = runQueryPage({ text: 'x'.repeat(100000), author: 'a'.repeat(5000), work: 'w'.repeat(5000), character: 'c'.repeat(5000), date: '1'.repeat(5000) });
+assert.equal(shown.text.textContent.length, 5000);
+assert.equal(shown.credit.textContent.length, '\u2014 '.length + 200 + 2 + 200 + 2 + 300 + ' ()'.length + 64);
+assert.ok(shown['open-in-app'].href.length < 6000, 'the app link stays bounded');
+
+const rtl = '\u05E9\u05DC\u05D5\u05DD \u0627\u0644\u0633\u0644\u0627\u0645';
+shown = runQueryPage({ text: rtl, author: rtl });
+assert.equal(shown.text.textContent, rtl);
+assert.equal(shown.credit.textContent, `\u2014 ${rtl}`);
+assert.match(linkPage, /<blockquote id="text" dir="auto">/);
+assert.match(linkPage, /<figcaption id="credit" dir="auto">/);
+
+const bidi = '\u202Eevil\u202C \u2066x\u2069';
+shown = runQueryPage({ text: bidi, author: bidi, work: bidi, character: bidi, date: bidi });
+assert.equal(shown.text.textContent, 'evil x');
+assert.ok(!/[\u202A-\u202E\u2066-\u2069]/.test(shown.credit.textContent), 'no bidi control is shown in the credit');
+
+shown = runQueryPage({ text: 'Words.', author: '' });
+assert.equal(shown.text.textContent, 'Words.');
+assert.equal(shown.credit.textContent, '');
+assert.equal(new URLSearchParams(shown['open-in-app'].href.slice('quips://add?'.length)).get('author'), '');
+shown = runQueryPage({ author: 'Someone' });
+assert.equal(shown.quote, undefined, 'a link with no text shows no quote');
+checks += 18;
 
 // The link to the Quote Unquote issue. `issuePages` reads the real issue pages and the archive
 // list; the cases below use the same shapes with a fixed clock.
