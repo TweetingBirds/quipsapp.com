@@ -1,12 +1,20 @@
 #!/usr/bin/env node
 // Checks the dates on the Save to Quips pages (scripts/build-save-pages.mjs) against the
-// shapes quoteDate takes in the collections, and the query page's filter on the `date` it
-// passes to quips://add. Exits non-zero on the first failure. CI runs it before the build.
+// shapes quoteDate takes in the collections, the query page's filter on the `date` it
+// passes to quips://add, and the link from a quote's page to its Quote Unquote issue: that
+// every issue page is matched to one quote, that each link lands on a file in this repo, and
+// that an unsent issue's link stays hidden until its time. Exits non-zero on the first failure.
+// CI runs it before the build.
 // Run locally with: node scripts/check-save-pages.mjs
 
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import path from 'node:path';
 import vm from 'node:vm';
-import { APP_DATE, queryPage, quotePage } from './build-save-pages.mjs';
+import { fileURLToPath } from 'node:url';
+import { APP_DATE, issuePages, queryPage, quotePage } from './build-save-pages.mjs';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
 const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", mdash: '—' };
 
@@ -86,6 +94,71 @@ for (const date of dropped) {
     assert.ok(!APP_DATE.test(date.trim()), `APP_DATE should reject ${JSON.stringify(date)}`);
     assert.equal(forwardedDate(date), null, `query page should drop ${JSON.stringify(date)}`);
     checks += 1;
+}
+
+// The link to the Quote Unquote issue. `issuePages` reads the real issue pages and the archive
+// list; the cases below use the same shapes with a fixed clock.
+const quote = { id: 'check-001', content: 'Words.', authorName: 'Someone', source: 'A Source' };
+const noteOf = (html) => html.match(/<p class="note"[^>]*>Featured in [\s\S]*?<\/p>/)?.[0] ?? null;
+const issue = { number: 3, file: '3-hall.html', href: '/quote-unquote/3-hall.html', publishAt: null };
+const LANDING = '<a href="/quote-unquote.html">Quote Unquote</a>';
+
+// A public issue links its number. Nothing hides it.
+assert.equal(noteOf(quotePage(quote, issue)),
+    `<p class="note">Featured in ${LANDING}, <a href="/quote-unquote/3-hall.html">issue 3</a>.</p>`);
+assert.ok(!quotePage(quote, issue).includes('data-publish-at'), 'a public issue needs no guard');
+// An issue that has not been sent keeps the whole note hidden until its time, and the page
+// carries the script that reveals it.
+const guarded = quotePage(quote, { ...issue, publishAt: '2026-10-22T13:00:00Z' });
+assert.equal(noteOf(guarded),
+    `<p class="note" hidden data-publish-at="2026-10-22T13:00:00Z">Featured in ${LANDING}, <a href="/quote-unquote/3-hall.html">issue 3</a>.</p>`);
+checks += 3;
+
+// That script, run on either side of the time.
+function revealed(publishAt, now) {
+    const node = { hidden: true, getAttribute: () => publishAt };
+    const timers = [];
+    vm.runInNewContext(guarded.match(/<script>([\s\S]*?)<\/script>/g).at(-1).replace(/<\/?script>/g, ''), {
+        document: { querySelectorAll: () => [node], getElementById: () => null },
+        Date: { parse: Date.parse, now: () => Date.parse(now) },
+        setTimeout: (fn, wait) => timers.push({ fn, wait }),
+        isNaN,
+    });
+    const before = !node.hidden;
+    timers.forEach((timer) => timer.fn());
+    return { before, after: !node.hidden, waits: timers.map((timer) => timer.wait) };
+}
+assert.deepEqual(revealed('2026-10-22T13:00:00Z', '2026-10-22T13:00:01Z'), { before: true, after: true, waits: [] });
+assert.deepEqual(revealed('2026-10-22T13:00:00Z', '2026-10-22T12:00:00Z'), { before: false, after: true, waits: [3600000] });
+assert.deepEqual(revealed('not a date', '2026-10-22T12:00:00Z'), { before: false, after: false, waits: [] });
+checks += 3;
+
+// With only the feed's issue number there is no page to link: the note reads as it always has.
+assert.equal(noteOf(quotePage({ ...quote, newsletterIssue: 2 })), `<p class="note">Featured in ${LANDING}, issue 2.</p>`);
+assert.equal(noteOf(quotePage(quote)), null);
+// The page wins over the feed for the number it links, and nothing in it reaches the markup unescaped.
+assert.equal(noteOf(quotePage({ ...quote, newsletterIssue: 9 }, issue)),
+    `<p class="note">Featured in ${LANDING}, <a href="/quote-unquote/3-hall.html">issue 3</a>.</p>`);
+assert.ok(!noteOf(quotePage(quote, { ...issue, href: '/x"><script>', publishAt: '"><b>' })).includes('<script>'));
+checks += 4;
+
+// Against the real files: every issue page is matched to exactly one quote, and each link
+// lands on a page that exists here, is listed in the archive, and is not a stray file.
+const { byQuote, problems } = issuePages(ROOT, Date.parse('2026-10-20T00:00:00Z'));
+assert.deepEqual(problems, []);
+assert.ok(byQuote.size > 0, 'no Quote Unquote issue page was matched to a quote');
+const collections = path.join(ROOT, 'collections');
+const quoteIds = new Set();
+if (fs.existsSync(collections)) {
+    for (const name of fs.readdirSync(collections).filter((file) => file.endsWith('.json'))) {
+        for (const q of JSON.parse(fs.readFileSync(path.join(collections, name), 'utf8')).quotes || []) quoteIds.add(q.id);
+    }
+}
+for (const [id, page] of byQuote) {
+    assert.ok(fs.existsSync(path.join(ROOT, page.href.slice(1))), `${page.href} (the issue of ${id}) is not a file in this repo`);
+    assert.ok(noteOf(quotePage({ ...quote, id }, page))?.includes(`href="${page.href}"`), `the page for ${id} does not link ${page.href}`);
+    if (quoteIds.size) assert.ok(quoteIds.has(id), `${page.file} saves ${id}, which is not a quote in the collections: its Save page would 404`);
+    checks += 2;
 }
 
 console.log(`check-save-pages: ${checks} checks passed`);
