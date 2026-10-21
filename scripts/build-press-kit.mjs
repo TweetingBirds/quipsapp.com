@@ -73,13 +73,20 @@ const factSheet = [
     '                The dark variant is a separate design — black tile, teal',
     '                glyph — not a recolour. Use it on dark grounds.',
     'brand/          Wordmark and icon+wordmark lockup (SVG, outlined —',
-    '                no font needed to render them correctly)',
+    '                no font needed to render them correctly), and the',
+    '                "Add quote to Quips" button in light and dark (SVG) plus',
+    '                a 3x PNG of the light one for email',
     'screenshots/    Marketing screenshots, light + dark, foldered by platform (iphone/, ipad/, mac/, iphone-duo/)',
     'quips-social-preview.png  1200x630 social/OG image',
     '',
     'The wordmark is Libre Baskerville, supplied as outlines rather than live',
     'text so it renders identically everywhere. Please do not re-set it in',
     'another face, recolour it, or stretch it.',
+    '',
+    'The "Add quote to Quips" button goes beside a quote and links to',
+    'https://quipsapp.com/save/q/<quote id>. Use the light cut on light pages and',
+    'the dark cut on dark ones, at 36 px high or more, with clear space of half',
+    'its height on every side. The PNG is 319x120; show it at 106x40.',
     '',
     'For the "Download on the App Store" badge, use Apple\'s official artwork:',
     'https://developer.apple.com/app-store/marketing/guidelines/',
@@ -122,6 +129,9 @@ copyAsset('quips-app-icon-dark-256.png', 'icons/quips-app-icon-dark-256.png');
 copyAsset('brand/quips-wordmark.svg', 'brand/quips-wordmark.svg');
 copyAsset('brand/quips-wordmark-reverse.svg', 'brand/quips-wordmark-reverse.svg');
 copyAsset('brand/quips-lockup.svg', 'brand/quips-lockup.svg');
+copyAsset('brand/add-quote-button-light.svg', 'brand/quips-add-quote-button-light.svg');
+copyAsset('brand/add-quote-button-dark.svg', 'brand/quips-add-quote-button-dark.svg');
+copyAsset('brand/add-quote-button-light@3x.png', 'brand/quips-add-quote-button-light@3x.png');
 copyAsset('og-image.png', 'quips-social-preview.png');
 
 const manifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'images', 'screenshots.json'), 'utf8'));
