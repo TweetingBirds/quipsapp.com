@@ -51,7 +51,7 @@ jobs:
           set -euo pipefail
 
           # Published whole. Only .well-known is a dot-path.
-          dirs=(.well-known collections css go images js legal quote-unquote save spec)
+          dirs=(.well-known collections css fonts go images js legal quote-unquote save spec)
 
           # Root files the site cannot work without. tar fails if one is missing.
           files=(CNAME robots.txt sitemap.xml icons.json
