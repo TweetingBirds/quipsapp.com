@@ -31,13 +31,60 @@ jobs:
 
       # Not `actions/upload-pages-artifact`: since v4 it leaves out dotfiles, which
       # would drop `.well-known/apple-app-site-association` — the file iOS fetches to
-      # open /save links in the app. This is that action's own packaging, minus the
-      # exclusion, uploaded under the name `deploy-pages` expects.
-      - name: Archive site, keeping .well-known
+      # open /save links in the app. This is that action's own packaging, uploaded
+      # under the name `deploy-pages` expects, but with an allowlist instead of "the
+      # whole checkout": a file reaches the public site only if it is named here.
+      #
+      # The old step archived everything except .git and .github, so every other
+      # dotfile and repo-only path went live too (.data-version, .gitignore, and any
+      # .env that was ever committed by accident; panel finding websec-8). A new
+      # root-level page is covered by the `*.html` glob; anything else new that the
+      # site serves (a root file, a directory) needs adding to a list below, and its
+      # absence shows up as a 404, not a leak.
+      #
+      # Deliberately not published: .data-version, .gitignore, .github/, docs/,
+      # scripts/, serve.sh. Nothing on the site or in the app links to them.
+      # spec/ and legal/ are published: spec/ is the public Quote Markup spec, and the
+      # app fetches legal/*.md.
+      - name: Archive site (allowlist), keeping .well-known
         run: |
+          set -euo pipefail
+
+          # Published whole. Only .well-known is a dot-path.
+          dirs=(.well-known collections css fonts go images js legal quote-unquote save spec)
+
+          # Root files the site cannot work without. tar fails if one is missing.
+          files=(CNAME robots.txt sitemap.xml icons.json
+                 announcements.json faqs.json releases.json
+                 collections.json collections-stats.json)
+          for page in *.html; do files+=("$page"); done
+
+          # Root files the deploy pulls only when the pinned data version has them.
+          for feed in recently-added new-collections on-this-day newsletter-picks \
+                      featured-collections search-index; do
+            if [ -e "$feed.json" ]; then files+=("$feed.json"); fi
+          done
+
+          paths=()
+          for p in "${dirs[@]}" "${files[@]}"; do paths+=("./$p"); done
+
           tar --dereference --hard-dereference --directory . \
-            --exclude=.git --exclude=.github \
-            -cf "$RUNNER_TEMP/artifact.tar" .
+            -cf "$RUNNER_TEMP/artifact.tar" "${paths[@]}"
+
+          # Belt and braces: .well-known must be in, and no other dot-path may be,
+          # including one nested inside an allowed directory (images/.env).
+          tar -tf "$RUNNER_TEMP/artifact.tar" > "$RUNNER_TEMP/artifact.list"
+          if ! grep -qx './.well-known/apple-app-site-association' "$RUNNER_TEMP/artifact.list"; then
+            echo "::error::.well-known/apple-app-site-association is missing from the site archive"
+            exit 1
+          fi
+          stray="$(grep -E '(^|/)\.[^/]' "$RUNNER_TEMP/artifact.list" | grep -vE '^\./\.well-known(/|$)' || true)"
+          if [ -n "$stray" ]; then
+            echo "::error::Dotfiles would be published; remove them or exclude them:"
+            echo "$stray"
+            exit 1
+          fi
+          echo "Archived $(wc -l < "$RUNNER_TEMP/artifact.list") entries."
       - uses: actions/upload-artifact@v4
         with:
           name: github-pages
