@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 12, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 20, 2026
 
 > **In simple terms:**
 >
@@ -167,10 +167,6 @@ Our website does not set cookies. If you choose a light or dark theme, your brow
 
 Our website uses **Cloudflare Web Analytics** to count page views so we can see which pages people find useful. It is a privacy-first analytics service: it sets no cookies, does not fingerprint your browser for advertising, does not track you across other sites, and gives us only aggregate numbers (like total visits per page). It cannot identify you as an individual, and we couldn't use it to do so even if we wanted to. See [Cloudflare's Privacy Policy](https://www.cloudflare.com/privacypolicy/) for details.
 
-### Fonts
-
-Our website loads the Inter typeface from **Google Fonts**, served from Google's servers. Like any web request, fetching the font discloses standard request information to Google — such as your IP address and browser user agent. Google states that the Fonts service does not use cookies. See [Google Fonts privacy information](https://developers.google.com/fonts/faq/privacy) for details.
-
 ### Data the App Requests From Our Website {#app-requests}
 
 The Quips app fetches public content — such as curated Collections and the Discover search index, in-app announcements, FAQs, and the text of these legal documents — from quipsapp.com and data.quipsapp.com. These requests are served by GitHub Pages and Cloudflare's content delivery network. Like any web request, they generate standard server request metadata (such as IP address, timestamp, and the file requested), which GitHub and Cloudflare log as part of operating their infrastructure. These requests carry nothing from your library. We do not access, use, or combine this metadata to identify or track individual users.
@@ -204,11 +200,11 @@ This is what the App's privacy label on the App Store declares as Crash Data and
 - We do not use analytics services (e.g., Google Analytics, Firebase) within the App
 - Sentry is the only company the App reports data to, and it receives diagnostics only — never your content
 
-Our website uses three third-party services, described in [Website](#website-newsletter) above: MailerLite (solely to operate the optional newsletter and email-course signups), Cloudflare Web Analytics (cookieless, aggregate page metrics), and Google Fonts (typeface delivery). None of them are used for advertising or cross-site tracking.
+Our website uses two third-party services, described in [Website](#website-newsletter) above: MailerLite (solely to operate the optional newsletter and email-course signups) and Cloudflare Web Analytics (cookieless, aggregate page metrics). Neither of them are used for advertising or cross-site tracking.
 
 ### Service Providers
 
-The companies that process information on our behalf are Sentry (Functional Software, Inc., United States) for crash and performance diagnostics, MailerLite (European Union) for newsletter and course emails, and Cloudflare and GitHub (United States) for hosting and delivering our website and the App's public content, plus Cloudflare's website analytics. Google (United States) delivers our website's font. We share with each only what it needs to provide its service. We may also disclose information if the law requires it, to protect our rights or the safety of others, or to a successor if Tweeting Birds or the App is transferred, in which case this policy will continue to apply to that information.
+The companies that process information on our behalf are Sentry (Functional Software, Inc., United States) for crash and performance diagnostics, MailerLite (European Union) for newsletter and course emails, and Cloudflare and GitHub (United States) for hosting and delivering our website and the App's public content, plus Cloudflare's website analytics. We share with each only what it needs to provide its service. We may also disclose information if the law requires it, to protect our rights or the safety of others, or to a successor if Tweeting Birds or the App is transferred, in which case this policy will continue to apply to that information.
 
 ## Data Retention
 
