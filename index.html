@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self' https://assets.mailerlite.com; base-uri 'self'; object-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self'; base-uri 'self'; object-src 'none';">
     <meta name="description" content="Save the quotes that move you, style them beautifully in Share Studio, and share them anywhere. Browse 90+ curated collections — free to start.">
     <meta name="keywords" content="quotes, quote collector, quote organizer, motivation, inspiration, quotebook, wisdom, sayings, journal, widget, daily quote, stoicism, mindfulness, iOS app">
     <link rel="canonical" href="https://quipsapp.com/">
@@ -454,7 +454,7 @@
                         <h2>The Quote Unquote Newsletter</h2>
                         <blockquote>Quotes deserve more than a screenshot. Get one quote each week, unpacked—the context, the meaning, and why it's worth holding onto.</blockquote>
                     </div>
-                    <form class="newsletter-form" action="https://assets.mailerlite.com/jsonp/1995826/forms/174542333353657562/subscribe" method="post">
+                    <form class="newsletter-form" action="/quote-unquote.html" method="post" data-signup="newsletter">
                         <div class="newsletter-form-row">
                             <label class="sr-only" for="newsletter-email">Email address</label>
                             <input type="email" id="newsletter-email" name="fields[email]" placeholder="Email" autocomplete="email" required>
@@ -464,8 +464,11 @@
                                 <span class="sr-only">Loading...</span>
                             </button>
                         </div>
-                        <input type="hidden" name="ml-submit" value="1">
-                        <input type="hidden" name="anticsrf" value="true">
+                        <div class="signup-aside" aria-hidden="true">
+                            <label for="newsletter-email-website">Leave this field empty</label>
+                            <input type="text" id="newsletter-email-website" name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true">
+                        </div>
+                        <noscript><p class="signup-noscript">Signing up needs JavaScript. If you'd rather leave it off, email nate@quipsapp.com and I'll add you by hand.</p></noscript>
                     </form>
                     <p class="newsletter-archive-link"><a href="quote-unquote.html">Read past issues of Quote Unquote →</a></p>
                 </div>

@@ -832,6 +832,24 @@ a {
     border: 0;
 }
 
+/* Signup-form honeypot: moved off-screen, not display:none (some bots skip
+   those), and aria-hidden + tabindex="-1" in the markup so people and assistive
+   tech never reach it. See "Forms (MailerLite)" in docs/SITE-CONVENTIONS.md. */
+.signup-aside {
+    position: absolute;
+    left: -10000px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.signup-noscript {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    color: inherit;
+}
+
 /* ===== CTA Section ===== */
 .cta {
     padding: var(--section-padding) 0;
