@@ -453,6 +453,23 @@ those sources is all that's needed — never hand-edit the zip.
 `legal/terms.md` and `legal/privacy.md`. Edit the Markdown, not the HTML —
 see "Legal documents" below.
 
+## What the deploy publishes (allowlist)
+
+`deploy.yml` builds the Pages artifact with its own `tar` (not
+`actions/upload-pages-artifact`, which drops `.well-known/`), and the `tar`
+names what it ships: the directories `.well-known collections css go images js
+legal quote-unquote save spec`, every root `*.html`, and the root files listed
+in the "Archive site (allowlist)" step. Everything else stays in the repo only:
+`.data-version`, `.gitignore`, `.github/`, `docs/`, `scripts/`, `serve.sh`, and
+any dotfile, including one nested inside a published directory (the step fails
+the build on that, so a stray `.env` can't go live).
+
+When you add something the live site must serve from the repo root (a new data
+file, a new top-level directory), add it to that step, or it will 404. A new
+root-level page needs nothing. Nothing may link to `docs/` or `scripts/`; the
+app reads `legal/*.md`, `announcements.json` and `faqs.json`
+from here, and `spec/` is the public Quote Markup spec.
+
 ## Legal documents (Markdown source)
 
 `legal/terms.md` and `legal/privacy.md` are the source of truth for the
