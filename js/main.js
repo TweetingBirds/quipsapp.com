@@ -388,7 +388,11 @@
     //  - A honeypot input (`website`), moved off-screen and aria-hidden, so
     //    people and assistive tech never meet it. A bot that fills it gets the
     //    normal success screen and nothing is sent.
-    //  - A minimum time between page load and submit. Same treatment.
+    //  - A minimum time between page load and submit. Same treatment. A form
+    //    that arrived prefilled from the email course (see below) swaps the
+    //    clock for proof of a person: a trusted tap, click or keypress inside
+    //    that form. A prefilled address makes a very fast, honest tap likely,
+    //    and a timer alone would drop it as a bot.
     //  - An email shape check. This one is for people: a typo gets the browser's
     //    own validation bubble instead of a confirmation email to nowhere.
     const SIGNUP_ENDPOINTS = {
@@ -403,6 +407,39 @@
         return value.length <= 254 && EMAIL_PATTERN.test(value);
     }
 
+    // The email course's last message links to
+    //   quote-unquote.html#email=<address>
+    // so a reader can join the newsletter in two taps. The address rides in
+    // the fragment, which browsers never send to a server or in a Referer.
+    // It is untrusted input: read it, decode it, check it with the same test
+    // the form uses, and only ever assign it to an input's .value. Whatever
+    // it contains, the fragment is then removed from the address bar, so a
+    // copied URL or a screenshot cannot carry the address. Nothing is sent
+    // until the person taps Subscribe. Returns the address, or '' if the
+    // fragment held no email key or an unusable value.
+    function takeEmailFromFragment() {
+        const params = location.hash.replace(/^#/, '').split('&');
+        const pair = params.find(part => part.slice(0, 6).toLowerCase() === 'email=');
+        if (pair === undefined) return '';
+
+        // Drop the fragment whatever it held. Wrapped because some embedded
+        // or sandboxed contexts throw on history changes.
+        try {
+            history.replaceState(null, '', location.pathname + location.search);
+        } catch (e) { /* the address stays in the bar; nothing else depends on it */ }
+
+        let value = '';
+        try {
+            // decodeURIComponent leaves '+' alone, which is right: MailerLite
+            // inserts the raw address, so a '+' is part of it (name+tag@...),
+            // while an encoded form arrives as %2B or %40.
+            value = decodeURIComponent(pair.slice(6)).trim();
+        } catch (e) {
+            return ''; // malformed %-escape
+        }
+        return isPlausibleEmail(value) ? value : '';
+    }
+
     function initSignupForms() {
         document.querySelectorAll('form[data-signup]').forEach(form => {
             const kind = form.getAttribute('data-signup');
@@ -414,6 +451,27 @@
             const honeypot = form.querySelector('input[name="website"]');
             const submitBtn = form.querySelector('.newsletter-submit, .course-submit-btn');
             const loadingBtn = form.querySelector('.newsletter-loading, .course-loading-btn');
+
+            // Only forms that opt in with data-prefill="fragment" read the
+            // address from the URL (quote-unquote.html).
+            let prefilled = false;
+            let sawPerson = false;
+            if (emailInput && form.getAttribute('data-prefill') === 'fragment') {
+                const address = takeEmailFromFragment();
+                if (address) {
+                    emailInput.value = address; // .value only, never markup
+                    prefilled = true;
+                    const note = form.parentElement.querySelector('[data-prefill-note]');
+                    if (note) note.hidden = false;
+                    // A trusted event inside this form is a person at it:
+                    // script-made events are not isTrusted.
+                    ['pointerdown', 'touchstart', 'keydown', 'click'].forEach(type => {
+                        form.addEventListener(type, evt => {
+                            if (evt.isTrusted) sawPerson = true;
+                        }, { capture: true, passive: true });
+                    });
+                }
+            }
 
             function setLoading(loading) {
                 if (!submitBtn || !loadingBtn) return;
@@ -438,6 +496,12 @@
                     const body = wrapper.querySelector('.newsletter-body');
                     const success = wrapper.querySelector('.newsletter-success');
                     if (body && success) {
+                        // A reader arriving from the course is already a
+                        // confirmed subscriber, and MailerLite sends no second
+                        // confirmation to one, so "check your inbox" alone
+                        // would leave them waiting for nothing.
+                        const line = success.querySelector('[data-prefilled-text]');
+                        if (prefilled && line) line.textContent = line.getAttribute('data-prefilled-text');
                         body.style.display = 'none';
                         success.style.display = 'block';
                     }
@@ -464,7 +528,8 @@
                 setLoading(true);
 
                 const filledHoneypot = honeypot && honeypot.value !== '';
-                const tooFast = Date.now() - pageLoadedAt < SIGNUP_MIN_MS;
+                const tooFast = Date.now() - pageLoadedAt < SIGNUP_MIN_MS &&
+                    !(prefilled && sawPerson);
                 if (filledHoneypot || tooFast) {
                     // Look like a real submission: the usual pause, then success.
                     await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 600));

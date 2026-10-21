@@ -125,7 +125,7 @@
 
             <div class="newsletter-wrapper">
                 <div class="newsletter-body">
-                    <form class="newsletter-form" action="/quote-unquote.html" method="post" data-signup="newsletter">
+                    <form class="newsletter-form" action="/quote-unquote.html" method="post" data-signup="newsletter" data-prefill="fragment">
                         <div class="newsletter-form-row">
                             <label class="sr-only" for="qu-hero-email">Email address</label>
                             <input type="email" id="qu-hero-email" name="fields[email]" placeholder="Email" autocomplete="email" required>
@@ -141,10 +141,11 @@
                         </div>
                         <noscript><p class="signup-noscript">Signing up needs JavaScript. If you'd rather leave it off, email nate@quipsapp.com and I'll add you by hand.</p></noscript>
                     </form>
+                    <p class="qu-prefill-note" data-prefill-note role="status" hidden>Your address is filled in from the course. Tap Subscribe to get Quote Unquote every Thursday.</p>
                 </div>
                 <div class="newsletter-success" style="display: none;">
                     <h2>Thank you!</h2>
-                    <p>Almost there — check your inbox to confirm your subscription.</p>
+                    <p data-prefilled-text="Almost there — check your inbox to confirm your subscription. If you already have, you're all set: the next Quote Unquote arrives on Thursday.">Almost there — check your inbox to confirm your subscription.</p>
                 </div>
             </div>
             <p class="qu-hero-note">Free. One email a week. Unsubscribe anytime.</p>
