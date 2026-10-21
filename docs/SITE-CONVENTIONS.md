@@ -103,24 +103,25 @@ In this order, after charset/viewport:
 ## Content Security Policy (every page)
 
 Every page carries a CSP `<meta http-equiv>` tag. Two variants — the only
-difference is MailerLite in `connect-src`/`form-action` on pages with signup
-forms. Never add MailerLite hosts to `script-src` (we don't load their
-scripts), and keep the Cloudflare Insights hosts so the analytics beacon works
-when enabled. Fonts are self-hosted, so `style-src` and `font-src` name no
-external host; do not add one back (the privacy policy promises there is no
-third-party font service).
+difference is MailerLite in `connect-src` on pages with signup forms. Never
+add MailerLite hosts to `script-src` (we don't load their scripts), and keep the
+Cloudflare Insights hosts so the analytics beacon works when enabled. Fonts are
+self-hosted, so `style-src` and `font-src` name no external host; do not add one
+back (the privacy policy promises there is no third-party font service).
 
 Pages **with** MailerLite forms (`index.html`, `course.html`, `quote-unquote.html`,
 and every `quote-unquote/<n>-<slug>.html` edition — each ends with a subscribe
 form):
 
 ```
-default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self' https://assets.mailerlite.com; base-uri 'self'; object-src 'none';
+default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self'; base-uri 'self'; object-src 'none';
 ```
 
 All other pages (and the generated collection template in
 `scripts/build-collections.mjs`): same policy minus
-`https://assets.mailerlite.com` in `connect-src` and `form-action`.
+`https://assets.mailerlite.com` in `connect-src`. `form-action` is `'self'` on
+every page: the signup forms are submitted by `js/main.js` with `fetch`, never
+by the browser (see Forms below).
 
 ## Theme pre-paint script (every page)
 
@@ -238,6 +239,20 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
 - We POST directly to MailerLite's subscribe endpoints from `js/main.js`.
   **Never** load MailerLite scripts (`webforms.min.js`) or their `takel`
   tracking pixel — the site must not run third-party trackers.
+- **The HTML never carries the MailerLite URL.** A signup `<form>` has
+  `data-signup="newsletter"` or `"course"`, and its `action` is the page's own
+  URL (`/quote-unquote.html`, `/course.html`), so a crawler that replays the form
+  HTML gets nothing. The endpoints, and MailerLite's `ml-submit` and `anticsrf`
+  fields, live in `SIGNUP_ENDPOINTS` in `js/main.js`.
+- **Bot protection, no third parties.** Every signup form carries the honeypot
+  block (`<div class="signup-aside" aria-hidden="true">` holding a text input
+  named `website`, `tabindex="-1"`, `autocomplete="off"`), plus a `<noscript>`
+  note. Copy it from an existing form and give the input a unique id. `main.js`
+  sends nothing, and still shows the normal success screen, if the honeypot has
+  a value or the form is submitted less than 3 seconds after the page loaded.
+  An email that fails a basic shape check gets the browser's own validation
+  bubble. Never make the honeypot visible, remove its `aria-hidden`, or make it
+  focusable.
 - Every email input needs an associated visually-hidden `<label>`
   (`class="sr-only"`), not just a placeholder.
 - Success copy must say "check your inbox to confirm" (double opt-in), since

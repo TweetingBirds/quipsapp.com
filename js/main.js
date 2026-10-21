@@ -376,89 +376,118 @@
         }
     }
 
-    // ===== Newsletter Form =====
-    function initNewsletter() {
-        const form = document.querySelector('.newsletter-form');
-        const submitBtn = document.querySelector('.newsletter-submit');
-        const loadingBtn = document.querySelector('.newsletter-loading');
-        const body = document.querySelector('.newsletter-body');
-        const success = document.querySelector('.newsletter-success');
+    // ===== Signup Forms (newsletter + email course) =====
+    // Both kinds of form post straight to MailerLite's form endpoint from here:
+    // no MailerLite script, no tracker. Double opt-in is on, so every accepted
+    // signup makes MailerLite email a confirmation to whatever was typed, and
+    // bots were using that to mail strangers. The checks below are free of
+    // third parties, and none of them tells a bot it was caught:
+    //
+    //  - The <form action> is the page's own URL, so a crawler that replays the
+    //    form HTML gets nothing. The endpoints live here, keyed by data-signup.
+    //  - A honeypot input (`website`), moved off-screen and aria-hidden, so
+    //    people and assistive tech never meet it. A bot that fills it gets the
+    //    normal success screen and nothing is sent.
+    //  - A minimum time between page load and submit. Same treatment.
+    //  - An email shape check. This one is for people: a typo gets the browser's
+    //    own validation bubble instead of a confirmation email to nowhere.
+    const SIGNUP_ENDPOINTS = {
+        newsletter: 'https://assets.mailerlite.com/jsonp/1995826/forms/174542333353657562/subscribe',
+        course: 'https://assets.mailerlite.com/jsonp/1995826/forms/174550881235109546/subscribe'
+    };
+    const SIGNUP_MIN_MS = 3000;
+    const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+    const pageLoadedAt = Date.now();
 
-        if (!form) return;
-
-        form.addEventListener('submit', async function(e) {
-            e.preventDefault();
-
-            if (submitBtn && loadingBtn) {
-                submitBtn.style.display = 'none';
-                loadingBtn.style.display = 'inline-flex';
-            }
-
-            try {
-                const formData = new FormData(form);
-                await fetch(form.action, {
-                    method: 'POST',
-                    body: formData,
-                    mode: 'no-cors'
-                });
-
-                // Show success state
-                if (body && success) {
-                    body.style.display = 'none';
-                    success.style.display = 'block';
-                }
-            } catch (error) {
-                // Reset button state on error
-                if (submitBtn && loadingBtn) {
-                    submitBtn.style.display = 'inline-flex';
-                    loadingBtn.style.display = 'none';
-                }
-            }
-        });
+    function isPlausibleEmail(value) {
+        return value.length <= 254 && EMAIL_PATTERN.test(value);
     }
 
-    // ===== Course Signup Form =====
-    function initCourseForm() {
-        const forms = document.querySelectorAll('.course-signup-form');
-        const heroSection = document.querySelector('.course-hero');
-        const successSection = document.querySelector('.course-success');
-        const otherSections = document.querySelectorAll('.course-section');
+    function initSignupForms() {
+        document.querySelectorAll('form[data-signup]').forEach(form => {
+            const kind = form.getAttribute('data-signup');
+            const endpoint = SIGNUP_ENDPOINTS[kind];
+            if (!endpoint) return;
 
-        if (!forms.length) return;
+            const emailInput = form.querySelector('input[type="email"]');
+            const nameInput = form.querySelector('input[name="fields[name]"]');
+            const honeypot = form.querySelector('input[name="website"]');
+            const submitBtn = form.querySelector('.newsletter-submit, .course-submit-btn');
+            const loadingBtn = form.querySelector('.newsletter-loading, .course-loading-btn');
 
-        forms.forEach(form => {
-            const submitBtn = form.querySelector('.course-submit-btn');
-            const loadingBtn = form.querySelector('.course-loading-btn');
+            function setLoading(loading) {
+                if (!submitBtn || !loadingBtn) return;
+                submitBtn.style.display = loading ? 'none' : 'inline-flex';
+                loadingBtn.style.display = loading ? 'inline-flex' : 'none';
+            }
+
+            function showSuccess() {
+                if (kind === 'course') {
+                    const hero = document.querySelector('.course-hero');
+                    const success = document.querySelector('.course-success');
+                    if (hero && success) {
+                        hero.style.display = 'none';
+                        success.style.display = 'block';
+                        document.querySelectorAll('.course-section').forEach(section => {
+                            section.style.display = 'none';
+                        });
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                } else {
+                    const wrapper = form.closest('.newsletter-wrapper') || document;
+                    const body = wrapper.querySelector('.newsletter-body');
+                    const success = wrapper.querySelector('.newsletter-success');
+                    if (body && success) {
+                        body.style.display = 'none';
+                        success.style.display = 'block';
+                    }
+                }
+            }
+
+            if (emailInput) {
+                // A custom message set on submit sticks until the value changes.
+                emailInput.addEventListener('input', () => emailInput.setCustomValidity(''));
+            }
 
             form.addEventListener('submit', async function(e) {
                 e.preventDefault();
 
-                if (submitBtn && loadingBtn) {
-                    submitBtn.style.display = 'none';
-                    loadingBtn.style.display = 'inline-flex';
+                const email = emailInput ? emailInput.value.trim() : '';
+                if (!isPlausibleEmail(email)) {
+                    if (emailInput) {
+                        emailInput.setCustomValidity('Please enter a valid email address.');
+                        emailInput.reportValidity();
+                    }
+                    return;
+                }
+
+                setLoading(true);
+
+                const filledHoneypot = honeypot && honeypot.value !== '';
+                const tooFast = Date.now() - pageLoadedAt < SIGNUP_MIN_MS;
+                if (filledHoneypot || tooFast) {
+                    // Look like a real submission: the usual pause, then success.
+                    await new Promise(resolve => setTimeout(resolve, 600 + Math.random() * 600));
+                    showSuccess();
+                    return;
                 }
 
                 try {
-                    const formData = new FormData(form);
-                    await fetch(form.action, {
+                    // Built field by field, so nothing else in the form is sent.
+                    const formData = new FormData();
+                    formData.append('fields[email]', email);
+                    if (nameInput) formData.append('fields[name]', nameInput.value.trim());
+                    formData.append('ml-submit', '1');
+                    formData.append('anticsrf', 'true');
+                    await fetch(endpoint, {
                         method: 'POST',
                         body: formData,
                         mode: 'no-cors'
                     });
-
-                    // Show success state
-                    if (heroSection && successSection) {
-                        heroSection.style.display = 'none';
-                        successSection.style.display = 'block';
-                        otherSections.forEach(section => section.style.display = 'none');
-                        window.scrollTo({ top: 0, behavior: 'smooth' });
-                    }
+                    showSuccess();
                 } catch (error) {
                     // Reset button state on error
-                    if (submitBtn && loadingBtn) {
-                        submitBtn.style.display = 'inline-flex';
-                        loadingBtn.style.display = 'none';
-                    }
+                    setLoading(false);
                 }
             });
         });
@@ -577,8 +606,7 @@
         initScrollAnimations();
         initHeaderScroll();
         updateCopyrightYear();
-        initNewsletter();
-        initCourseForm();
+        initSignupForms();
         initHomeFaq();
         initDeepLinkBadges();
         initLightbox();

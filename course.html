@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self' https://assets.mailerlite.com; base-uri 'self'; object-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self'; base-uri 'self'; object-src 'none';">
     <meta name="description" content="Learn how to collect, organize, and use the quotes that matter—from books, conversations, and family moments. Free 7-day email course teaches you the system I wish I'd known from the start.">
     <meta name="keywords" content="quote collecting, how to save quotes, organize quotes, memorable quotes, quote organization system, preserve family quotes, capture kids' sayings">
     <link rel="canonical" href="https://quipsapp.com/course.html">
@@ -124,7 +124,7 @@
                 <h1 class="course-hero-title">Never Forget the Words That Matter Most</h1>
                 <p class="course-hero-subtitle">A free 7-day email course on capturing, organizing, and actually using the quotes you'd otherwise lose — one short lesson a day.</p>
 
-                <form class="course-signup-form" action="https://assets.mailerlite.com/jsonp/1995826/forms/174550881235109546/subscribe" method="post">
+                <form class="course-signup-form" action="/course.html" method="post" data-signup="course">
                     <div class="course-form-fields">
                         <label class="sr-only" for="course-name-hero">First name</label>
                         <input type="text" id="course-name-hero" name="fields[name]" placeholder="First name (optional)" autocomplete="given-name">
@@ -136,8 +136,11 @@
                         <span class="newsletter-spinner"></span>
                         <span class="sr-only">Loading...</span>
                     </button>
-                    <input type="hidden" name="ml-submit" value="1">
-                    <input type="hidden" name="anticsrf" value="true">
+                    <div class="signup-aside" aria-hidden="true">
+                        <label for="course-email-hero-website">Leave this field empty</label>
+                        <input type="text" id="course-email-hero-website" name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true">
+                    </div>
+                    <noscript><p class="signup-noscript">Signing up needs JavaScript. If you'd rather leave it off, email nate@quipsapp.com and I'll add you by hand.</p></noscript>
                 </form>
 
                 <!-- <p class="course-social-proof">Join 1,200+ people learning to become better quote collectors</p> -->
@@ -358,7 +361,7 @@
                 <h2 class="course-section-title">Start Paying Attention to the Words That Matter</h2>
                 <p class="course-final-subtitle">Seven days from now, you could have a collection system that works. Or you could still be screenshotting quotes you'll never look at again.</p>
 
-                <form class="course-signup-form course-signup-form-final" action="https://assets.mailerlite.com/jsonp/1995826/forms/174550881235109546/subscribe" method="post">
+                <form class="course-signup-form course-signup-form-final" action="/course.html" method="post" data-signup="course">
                     <div class="course-form-fields">
                         <label class="sr-only" for="course-name-final">First name</label>
                         <input type="text" id="course-name-final" name="fields[name]" placeholder="First name (optional)" autocomplete="given-name">
@@ -370,8 +373,11 @@
                         <span class="newsletter-spinner"></span>
                         <span class="sr-only">Loading...</span>
                     </button>
-                    <input type="hidden" name="ml-submit" value="1">
-                    <input type="hidden" name="anticsrf" value="true">
+                    <div class="signup-aside" aria-hidden="true">
+                        <label for="course-email-final-website">Leave this field empty</label>
+                        <input type="text" id="course-email-final-website" name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true">
+                    </div>
+                    <noscript><p class="signup-noscript">Signing up needs JavaScript. If you'd rather leave it off, email nate@quipsapp.com and I'll add you by hand.</p></noscript>
                 </form>
 
                 <p class="course-privacy-note">Your email address will never be shared or sold. Unsubscribe anytime.</p>

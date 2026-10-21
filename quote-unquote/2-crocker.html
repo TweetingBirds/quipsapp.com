@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self' https://assets.mailerlite.com; base-uri 'self'; object-src 'none';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self'; base-uri 'self'; object-src 'none';">
     <meta name="description" content="A.A. Milne gets the credit. A 1997 screenwriter did the work.">
     <link rel="canonical" href="https://quipsapp.com/quote-unquote/2-crocker.html">
 
@@ -245,7 +245,7 @@
                         <h2>Enjoyed this?</h2>
                         <blockquote>Get one quote like this in your inbox every week — the story behind it, why it still matters, and where it came from.</blockquote>
                     </div>
-                    <form class="newsletter-form" action="https://assets.mailerlite.com/jsonp/1995826/forms/174542333353657562/subscribe" method="post">
+                    <form class="newsletter-form" action="/quote-unquote.html" method="post" data-signup="newsletter">
                         <div class="newsletter-form-row">
                             <label class="sr-only" for="qu-2-email">Email address</label>
                             <input type="email" id="qu-2-email" name="fields[email]" placeholder="Email" autocomplete="email" required>
@@ -255,8 +255,11 @@
                                 <span class="sr-only">Loading...</span>
                             </button>
                         </div>
-                        <input type="hidden" name="ml-submit" value="1">
-                        <input type="hidden" name="anticsrf" value="true">
+                        <div class="signup-aside" aria-hidden="true">
+                            <label for="qu-2-email-website">Leave this field empty</label>
+                            <input type="text" id="qu-2-email-website" name="website" tabindex="-1" autocomplete="off" data-1p-ignore data-lpignore="true">
+                        </div>
+                        <noscript><p class="signup-noscript">Signing up needs JavaScript. If you'd rather leave it off, email nate@quipsapp.com and I'll add you by hand.</p></noscript>
                     </form>
                 </div>
                 <div class="newsletter-success" style="display: none;">
