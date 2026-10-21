@@ -50,13 +50,26 @@ In this order, after charset/viewport:
    <meta name="twitter:image" content="https://quipsapp.com/images/og-image.png">
    ```
 5. `<title>` — pattern: `<Page Name> — Quips` (homepage keeps its full marketing title).
-6. Favicons, Google Fonts (with preconnects), `css/styles.css` — unchanged from
-   existing pages. The Google Fonts link loads three families (identical on every
-   page): **Inter** (UI/body), **Libre Baskerville** (display/headings — system
-   `Baskerville` is preferred on Apple, Libre Baskerville is the cross-platform
-   webfont, Georgia the last-resort fallback), and **Merriweather** (quote text,
-   italic). Update the `<link>` on every page and in the `build-collections.mjs` /
-   `build-legal.mjs` templates together if it changes.
+6. Favicons, `css/fonts.css`, `css/styles.css` — unchanged from existing pages,
+   in that order (use the same path prefix as `styles.css`: `css/` on root pages,
+   `/css/` on pages that render at other depths). Fonts are self-hosted:
+   `css/fonts.css` holds the `@font-face` rules and `fonts/` the woff2 files and
+   their OFL license texts, from Fontsource (`@fontsource-variable/inter@5.3.0`,
+   `@fontsource/libre-baskerville@5.3.0`, `@fontsource/merriweather@5.3.0`;
+   latin and latin-ext subsets only). The site makes **no** requests to Google
+   hosts, so there are no `preconnect` tags, and the CSP names no font host. The
+   stylesheet loads three families (identical on every page): **Inter** (UI/body,
+   one variable file per subset covering weights 400-700), **Libre Baskerville**
+   (display/headings, 400/700/400 italic — system `Baskerville` is preferred on
+   Apple, Libre Baskerville is the cross-platform webfont, Georgia the last-resort
+   fallback), and **Merriweather** (quote text, 400/700, roman and italic). The
+   `url()`s in `fonts.css` are relative to the stylesheet (`../fonts/...`) on
+   purpose: the Quote Unquote email links `https://quipsapp.com/css/fonts.css`
+   from mail clients, and a root-relative URL would resolve against the mail
+   client instead. Adding a weight or family means downloading its woff2 files
+   from a pinned Fontsource version, adding the license text, and adding the
+   `@font-face` rules. Update the `<link>` on every page and in the
+   `build-collections.mjs` / `build-legal.mjs` templates together if it changes.
 7. Smart App Banner placeholder (uncomment at launch, one place to fill the id):
    ```html
    <!-- TODO(launch): uncomment and set the App Store id
@@ -93,14 +106,16 @@ Every page carries a CSP `<meta http-equiv>` tag. Two variants — the only
 difference is MailerLite in `connect-src`/`form-action` on pages with signup
 forms. Never add MailerLite hosts to `script-src` (we don't load their
 scripts), and keep the Cloudflare Insights hosts so the analytics beacon works
-when enabled.
+when enabled. Fonts are self-hosted, so `style-src` and `font-src` name no
+external host; do not add one back (the privacy policy promises there is no
+third-party font service).
 
 Pages **with** MailerLite forms (`index.html`, `course.html`, `quote-unquote.html`,
 and every `quote-unquote/<n>-<slug>.html` edition — each ends with a subscribe
 form):
 
 ```
-default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self' https://assets.mailerlite.com; base-uri 'self'; object-src 'none';
+default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self' https://assets.mailerlite.com; base-uri 'self'; object-src 'none';
 ```
 
 All other pages (and the generated collection template in

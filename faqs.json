@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-09-07",
+  "lastUpdated": "2026-10-20",
   "sections": [
     {
       "id": "getting-started",
@@ -184,7 +184,7 @@
     },
     {
       "id": "mac-ipad",
-      "title": "Mac & iPad",
+      "title": "Mac, iPad & iPhone Duo",
       "faqs": [
         {
           "id": "one-app",
@@ -195,6 +195,11 @@
           "id": "window-layout",
           "question": "Why does the app look different on my iPad than on my iPhone?",
           "answer": "The layout follows the width of the window rather than the name of the device. With room, Quips shows a sidebar beside your library, lays the quotes out as a grid, and opens a quote beside the list instead of on top of it. Drag a Mac window narrower or put an iPad app into a slim split view and it settles back into the phone's single-column layout."
+        },
+        {
+          "id": "duo-letterboxed",
+          "question": "Why is Quips letterboxed on my iPhone Duo?",
+          "answer": "Quips 2.0 was built with tools that predate iPhone Duo, so it runs in a box clear of the status bar and camera instead of filling the screen. Update to Quips 2.1 from the App Store and it fills both displays: unfold the phone to see your library on one side and the quote you're reading on the other, and Share Studio puts the preview on one side and its controls on the other. If it's still letterboxed after the update, email me."
         },
         {
           "id": "sidebar",
@@ -305,6 +310,11 @@
           "answer": "Yes. Choose Recently Deleted in the sidebar — on iPhone, tap Back from your library to get to it. Deleted quotes wait there for 30 days before they're removed for good; select one and Restore, or use Restore All. If you've only just deleted it, undo (shake, or Command-Z) brings it straight back."
         },
         {
+          "id": "restore-over-limit",
+          "question": "Why can't I restore a deleted quote?",
+          "answer": "On the free plan, restoring a quote counts the same as adding one, so Quips won't restore it if that would take your library past 100 quotes, and says there's Not Enough Room. Quotes in Recently Deleted don't count toward the limit; only the ones in your library do. Restore All brings back everything or nothing, so if there's room for some but not all, restore them one at a time. To make room, delete quotes you no longer need, or upgrade to Premium, which has no limit. Undoing a delete follows the same rule. Deleted quotes wait in Recently Deleted for 30 days, so there's time to decide."
+        },
+        {
           "id": "spotlight",
           "question": "Can I find my quotes without opening Quips?",
           "answer": "Yes — your quotes are indexed for Spotlight, so searching your device by a phrase or an author's name turns them up and tapping one opens it in Quips. The index keeps up as you add, edit and delete."
@@ -344,6 +354,32 @@
           "id": "refund",
           "question": "Can I get a refund?",
           "answer": "Refunds are handled by Apple. Visit reportaproblem.apple.com to request one for any App Store purchase."
+        }
+      ]
+    },
+    {
+      "id": "quote-unquote",
+      "title": "Quote Unquote & Email",
+      "faqs": [
+        {
+          "id": "add-quote-button",
+          "question": "What does the Add quote to Quips button do?",
+          "answer": "It saves the featured quote to your Quips library. You'll find it under the quote in each Quote Unquote email and on that issue's page on quipsapp.com. It opens a page showing the quote, with three buttons. Open in Quips (if installed) fills in a new quote in the app — the words, the author and the source — for you to look over and save. Get Quips is there if you don't have the app yet, and Copy quote puts the quote and its credit on your clipboard. Nothing is added until you save it, and a saved quote counts toward the free plan's 100 like any other. If your library is already full, Quips offers Premium instead of opening the quote."
+        },
+        {
+          "id": "save-address-invalid",
+          "question": "I tapped Open in Quips and Safari says the address is invalid.",
+          "answer": "That's what Safari says when Quips isn't installed. Open in Quips hands the quote straight to the app, so without it there's nothing to open — other browsers may do nothing at all. Tap Copy quote on the same page to keep the quote for now, or install Quips and come back to the page. If Quips is installed and you still see this, email me."
+        },
+        {
+          "id": "save-opened-web-page",
+          "question": "I tapped Add quote to Quips and got a web page, not the app.",
+          "answer": "That's expected for now. The button links to a page on quipsapp.com, and with Quips 2.1 or earlier that link opens in your browser even when the app is installed. Tap Open in Quips on the page and the quote opens in Quips, ready to save. An update after 2.1 lets the button open Quips directly; without the app, you'll still land on the page."
+        },
+        {
+          "id": "unsubscribe",
+          "question": "How do I unsubscribe from Quote Unquote or the email course?",
+          "answer": "Tap Unsubscribe at the bottom of any email. Course emails also have Update preferences beside it. The course lessons end after Day 7; after that you'll get an occasional email at most, and the same link stops those too. If an email still arrives after you've unsubscribed, or you'd like your address deleted, email me and I'll remove it."
         }
       ]
     }

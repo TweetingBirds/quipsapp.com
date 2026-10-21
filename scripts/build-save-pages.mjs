@@ -5,7 +5,9 @@
 //                  issue's "Save to Quips" button; newsletter-picks.json adds the issue number, and the
 //                  issue pages in quote-unquote/ add a link to the issue itself)
 //   /save/         the page for `https://quipsapp.com/save?text=...` links, which fills
-//                  itself from the query string in the browser
+//                  itself from the query string in the browser. Anyone can write such a link, so
+//                  the page says the quote came from the link and has not been checked, and it
+//                  makes no claim about checking attributions (that is true of /save/q/ pages only)
 //
 // With Quips installed iOS opens the app directly (Universal Links; see
 // .well-known/apple-app-site-association) and none of these pages load. Without it, the
@@ -189,7 +191,7 @@ const PUBLISH_GUARD_SCRIPT = `
         });
     })();`;
 
-function page({ title, canonical, description, body, script, head = '' }) {
+function page({ title, canonical, description, body, script, head = '', style = '' }) {
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -204,7 +206,7 @@ function page({ title, canonical, description, body, script, head = '' }) {
          installer to this quote.
     <meta name="apple-itunes-app" content="app-id=XXXXXXXXXX, app-argument=${escapeHtml(canonical)}">
     -->
-    <style>${STYLE}
+    <style>${STYLE}${style}
     </style>${head}
 </head>
 <body>
@@ -222,14 +224,20 @@ ${body}
 // opens Safari, not the app, so this page is where someone who has the app lands. It fills
 // the Add Quote editor from the quote's own fields. Without the app it errors or does
 // nothing, hence "(if installed)".
-function actions(openHref) {
+//
+// `note` is the sentence under the buttons. The default describes Quips and its attribution
+// research, which is true of a quote from the collections; the query page, whose quote is
+// whatever the link says, passes its own.
+const COLLECTION_NOTE = `Quips saves quotes with their source, and checks whether the attribution holds up.
+        Already have it? Choose Open in Quips to review and save the quote. <a href="/support.html">What is this?</a>`;
+
+function actions(openHref, note = COLLECTION_NOTE) {
     return `        <div class="actions">
             <a class="button" id="open-in-app" href="${openHref}">Open in Quips (if installed)</a>
             <a class="button secondary" href="/go/appstore.html?p=save">Get Quips</a>
             <button class="button secondary" id="copy-quote" type="button">Copy quote</button>
         </div>
-        <p class="note">Quips saves quotes with their source, and checks whether the attribution holds up.
-        Already have it? Choose Open in Quips to review and save the quote. <a href="/support.html">What is this?</a></p>`;
+        <p class="note">${note}</p>`;
 }
 
 function openHref(quote) {
@@ -295,15 +303,38 @@ ${actions(openHref(quote))}${issue}`;
 
 // The query-string form fills itself in the browser. Every value goes in through
 // textContent, because the parameters are untrusted text.
-const QUERY_BODY = `        <figure class="h-cite" id="quote" hidden>
-            <blockquote class="p-content" id="text"></blockquote>
-            <figcaption id="credit"></figcaption>
+//
+// Anyone can write this link, so the quote on it is the link author's claim and nothing more.
+// The page says so right above the quote, inside the figure, so a screenshot of the quote
+// carries the label. It has no `h-cite` or `p-content` class: it is not a citation Quips
+// publishes, and the share extension would otherwise read it as one. It also drops the brand
+// teal rule and the display serif that the /save/q/ pages use for a quote Quips stands behind,
+// and it makes no claim to check the attribution.
+const QUERY_NOTE = `Already have Quips? Choose Open in Quips to review the quote. Nothing is saved until you
+        confirm. <a href="/support.html">What is this?</a>`;
+
+const QUERY_BODY = `        <figure id="quote" hidden>
+            <p class="origin">From the link you followed, not from the Quips collections. Quips hasn't checked it.</p>
+            <blockquote id="text" dir="auto"></blockquote>
+            <figcaption id="credit" dir="auto"></figcaption>
         </figure>
         <p id="empty">This link doesn't carry a quote. <a href="/">Explore Quips</a>.</p>
         <div id="actions" hidden>
-${actions('quips://add')}
+${actions('quips://add', QUERY_NOTE)}
         </div>`;
 
+// The plain look of a quote that came from a link: the body face at a reading size, a neutral
+// rule, and long unbroken strings wrapped instead of widening the page.
+const QUERY_STYLE = `
+        .origin { margin: 0 0 1rem; padding: 0.5rem 0.75rem; border: 1px solid #8A8A8A;
+                  border-radius: 0.4rem; font-size: 0.9rem; }
+        #quote blockquote { border-left-color: #8A8A8A; font-family: inherit; font-size: 1.15rem;
+                            line-height: 1.5; overflow-wrap: anywhere; }
+        #quote figcaption { overflow-wrap: anywhere; }`;
+
+// The values shown on the page lose the bidirectional embedding, override and isolate
+// controls (U+202A-202E, U+2066-2069), which can make text read as something else. The
+// link to the app carries the values as written.
 const QUERY_SCRIPT = `
     (function () {
         var params = new URLSearchParams(window.location.search);
@@ -314,11 +345,12 @@ const QUERY_SCRIPT = `
         var work = (params.get('work') || '').slice(0, 300);
         var date = (params.get('date') || '').slice(0, 64);
         var character = (params.get('character') || '').slice(0, 200);
-        if (character) parts.push(character);
-        if (author) parts.push(author);
-        if (work) parts.push(work);
-        var credit = (parts.length ? '\\u2014 ' + parts.join(', ') : '') + (date ? ' (' + date + ')' : '');
-        document.getElementById('text').textContent = text;
+        function shown(value) { return value.replace(/[\\u202A-\\u202E\\u2066-\\u2069]/g, ''); }
+        if (character) parts.push(shown(character));
+        if (author) parts.push(shown(author));
+        if (work) parts.push(shown(work));
+        var credit = (parts.length ? '\\u2014 ' + parts.join(', ') : '') + (date ? ' (' + shown(date) + ')' : '');
+        document.getElementById('text').textContent = shown(text);
         document.getElementById('credit').textContent = credit;
         var open = new URLSearchParams({ content: text, author: author });
         if (work) open.set('source', work);
@@ -331,11 +363,12 @@ const QUERY_SCRIPT = `
 
 export function queryPage() {
     return page({
-        title: 'Save to Quips',
+        title: 'Quote from a link — Quips',
         canonical: `${SITE}/save/`,
-        description: 'Save this quote to Quips.',
+        description: 'A quote carried in a link. It is not from the Quips collections, and Quips has not checked it.',
         body: QUERY_BODY,
         script: QUERY_SCRIPT,
+        style: QUERY_STYLE,
     });
 }
 
