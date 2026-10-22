@@ -1,13 +1,13 @@
 # Terms and Conditions
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 12, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 20, 2026
 
 > **In simple terms:**
 >
 > - Use the app for personal purposes to organize your quotes
 > - You own the content you create
 > - Subscriptions auto-renew unless you cancel
-> - The app doesn't collect your quotes or personal data (only anonymous crash reports), and we never sell data
+> - The app doesn't collect your quotes or personal data (only crash and performance reports that aren't linked to you), and we never sell data
 > - You're responsible for your content and backups
 > - Don't use the app for illegal purposes
 > - Copyrights on quotes remain with their original owners
@@ -234,7 +234,7 @@ Your privacy is important to us. Our collection and use of personal information 
 
 Key points:
 
-- The App does not collect your quotes or information that identifies you; it sends only anonymous crash and performance reports
+- The App does not collect your quotes or information that identifies you; it sends only crash and performance reports that are not linked to you
 - Your quotes and app data stay on your device (or in your iCloud account if enabled)
 - If you email us for support, we receive your email address and message
 - We do not track, sell, or share your data
