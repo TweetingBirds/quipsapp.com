@@ -123,6 +123,32 @@ All other pages (and the generated collection template in
 every page: the signup forms are submitted by `js/main.js` with `fetch`, never
 by the browser (see Forms below).
 
+## Headers set at the Cloudflare edge
+
+GitHub Pages can't set response headers, so the `quipsapp.com` zone in
+Cloudflare sets them. None of this is in the repo, and a deploy doesn't change
+it. If you change one, change it in the Cloudflare dashboard and update this
+list.
+
+- **Always Use HTTPS** is on, so every `http://` request gets a 301 to `https://`.
+- **HSTS** (zone setting *Security header*): `max-age=15552000` (180 days), with
+  no `includeSubDomains` and no `preload`. The same setting adds
+  `X-Content-Type-Options: nosniff`. Leave preload off unless every subdomain
+  will serve HTTPS for good, because a preloaded domain can't be taken back
+  quickly.
+- **Response-header Transform Rule** (`http_response_headers_transform`, rule
+  `quipsapp_security_headers`, applies to `quipsapp.com` and `www.quipsapp.com`
+  only, not to `data.quipsapp.com`):
+  - `Referrer-Policy: strict-origin-when-cross-origin`
+  - `Content-Security-Policy: frame-ancestors 'self'`. A meta CSP can't carry
+    `frame-ancestors`, so it lives here. The browser enforces this header
+    alongside each page's meta policy, so don't repeat the meta policy's
+    directives in the header.
+- **SSL mode is Full, not Full (strict).** The origin answers with GitHub's
+  `*.github.io` certificate, not one for `quipsapp.com`, so strict mode would
+  fail every request with a 526. Switch to strict only once the origin serves a
+  certificate for `quipsapp.com`.
+
 ## Theme pre-paint script (every page)
 
 The theme class lives on `<body>` (`light-theme` / `dark-theme`, stored in
