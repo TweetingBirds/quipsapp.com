@@ -30,29 +30,21 @@
 </head>
 <body>
     <main>
-        <h1>Quips is coming soon to the App Store</h1>
-        <p id="redirect-msg" hidden>Taking you to the App Store&hellip; If nothing happens, <a id="store-link" href="https://quipsapp.com/">tap here</a>.</p>
-        <p id="comingsoon-msg">I'm putting on the finishing touches. In the meantime, <a href="https://quipsapp.com/">explore Quips on the website</a>.</p>
+        <h1>Quips on the App Store</h1>
+        <p>Taking you to the App Store&hellip; If nothing happens, <a id="store-link" href="https://apps.apple.com/app/id6752503448?pt=121730518&amp;ct=website-site&amp;mt=8">tap here</a>.</p>
     </main>
     <script>
     (function () {
-        // TODO(launch): set real app id + provider token below, then this page
-        // starts redirecting instead of showing the coming-soon message.
+        // The single App Store URL every site badge goes through. pt is the
+        // App Store Connect provider token, so ct shows up under Campaigns.
         // Pageviews of this page in Cloudflare Web Analytics = badge clicks.
-        var APP_STORE_BASE = 'https://apps.apple.com/app/idXXXXXXXXXX?pt=TODO';
+        var APP_STORE_BASE = 'https://apps.apple.com/app/id6752503448?pt=121730518&mt=8';
 
         var ALLOWED_PLACEMENTS = ['hero', 'cta', 'nav', 'collection', 'save'];
         var param = new URLSearchParams(window.location.search).get('p');
         var placement = ALLOWED_PLACEMENTS.indexOf(param) !== -1 ? param : 'site';
         var url = APP_STORE_BASE + '&ct=website-' + placement;
 
-        // Not launched yet (placeholder id still in the URL): keep the
-        // friendly coming-soon message and skip the redirect.
-        if (url.indexOf('XXXXXXXXXX') !== -1) return;
-
-        document.getElementById('comingsoon-msg').hidden = true;
-        var msg = document.getElementById('redirect-msg');
-        msg.hidden = false;
         document.getElementById('store-link').href = url;
         window.location.replace(url);
     })();

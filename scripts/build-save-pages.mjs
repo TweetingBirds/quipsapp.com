@@ -202,10 +202,8 @@ function page({ title, canonical, description, body, script, head = '', style = 
     <title>${escapeHtml(title)}</title>
     <meta name="description" content="${escapeHtml(description)}">
     <link rel="canonical" href="${escapeHtml(canonical)}">
-    <!-- TODO(launch): uncomment and set the App Store id; app-argument returns an
-         installer to this quote.
-    <meta name="apple-itunes-app" content="app-id=XXXXXXXXXX, app-argument=${escapeHtml(canonical)}">
-    -->
+    <!-- app-argument returns an installer to this quote. -->
+    <meta name="apple-itunes-app" content="app-id=6752503448, app-argument=${escapeHtml(canonical)}">
     <style>${STYLE}${style}
     </style>${head}
 </head>

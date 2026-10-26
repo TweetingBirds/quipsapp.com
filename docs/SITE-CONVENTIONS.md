@@ -10,7 +10,7 @@ the Email Course nav item, press.html had a different footer encoding, etc.).
 
 | Page | Purpose | Notes |
 |------|---------|-------|
-| `index.html` | Marketing homepage | Primary CTA = app download (Coming Soon until launch) |
+| `index.html` | Marketing homepage | Primary CTA = App Store badge (`/go/appstore.html?p=hero`, `?p=cta`) |
 | `collections.html` | Public collections index | Links to pre-rendered `/collections/<id>.html` pages; weekly featured card + search over collections/quotes/authors (`?q=` seeds the search box) |
 | `collection.html` | Legacy client-rendered collection view (`?id=`) | Kept as fallback; canonical points to static page |
 | `collections/<id>.html` | Pre-rendered collection pages | **Generated** by `scripts/build-collections.mjs` — never hand-edit; edit the script's template |
@@ -70,11 +70,9 @@ In this order, after charset/viewport:
    from a pinned Fontsource version, adding the license text, and adding the
    `@font-face` rules. Update the `<link>` on every page and in the
    `build-collections.mjs` / `build-legal.mjs` templates together if it changes.
-7. Smart App Banner placeholder (uncomment at launch, one place to fill the id):
+7. Smart App Banner (`app-argument` is the page's own canonical URL):
    ```html
-   <!-- TODO(launch): uncomment and set the App Store id
-   <meta name="apple-itunes-app" content="app-id=XXXXXXXXXX, app-argument=https://quipsapp.com/">
-   -->
+   <meta name="apple-itunes-app" content="app-id=6752503448, app-argument=https://quipsapp.com/">
    ```
 8. Cloudflare Web Analytics placeholder (uncomment + set token only if the
    beacon is NOT auto-injected by the Cloudflare proxy — adding both
@@ -242,23 +240,25 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
 
 ## App Store links & click tracking
 
-- Until launch, download CTAs render as a non-link "Coming Soon to the
-  App Store" pill (`.btn-coming-soon`), NOT an `href="#"` badge.
-- At launch, every badge points to the local redirect page
+- Every download CTA is the App Store badge (`images/app-store-badge.svg`),
+  and every badge points to the local redirect page
   `/go/appstore.html?p=<placement>` (placements: `hero`, `cta`, `nav`,
   `collection`). The redirect page holds the single real App Store URL and
   appends `ct=website-<placement>` campaign tokens. Cloudflare Web Analytics
   pageviews of `/go/appstore.html` = badge clicks (CF WA has no custom
   events), so visits vs. clicks gives the conversion funnel.
+  The redirect page carries the provider token (`pt=121730518`), which is
+  what makes `ct` show up under Campaigns in App Store Connect. Links posted
+  straight to social use the same URL with `ct=<channel>` (`threads`,
+  `bluesky`) instead of the redirect page.
 - Collection page badges (`p=collection`, in `scripts/build-collections.mjs`)
   additionally carry `data-collection-id="<id>"`. `js/main.js`'s
   `initDeepLinkBadges()` uses it to try the native
   `quips://public-collection/<id>` scheme first (for users who already have
   the app) and falls back to the badge's normal `/go/appstore.html?p=collection`
   href after 1.5s if the app doesn't open (detected via
-  `visibilitychange`/`pagehide`). This only activates once the badge's
-  `TODO(launch)` comment is uncommented — until then it's inert markup inside
-  the comment, same as every other badge.
+  `visibilitychange`/`pagehide`). `collection.html` renders its badge after
+  load, so it has no `data-collection-id` and uses the plain badge link.
 
 ## Forms (MailerLite)
 
