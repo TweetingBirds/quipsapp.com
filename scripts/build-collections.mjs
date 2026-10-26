@@ -196,12 +196,9 @@ function collectionPageHtml(collection) {
            specificity at zero so css/styles.css can override any of these. */
         :where(.quote-note) { margin-top: 0.75rem; font-size: 0.8125rem; font-style: italic; color: var(--text-muted); }
         :where(.collection-cta) { border-radius: var(--card-radius); margin-top: 3rem; }
-        :where(.collection-cta .btn-coming-soon) { background-color: rgba(255, 255, 255, 0.15); color: #fff; border: 1px solid rgba(255, 255, 255, 0.4); cursor: default; }
     </style>
 
-    <!-- TODO(launch): uncomment and set the App Store id
-    <meta name="apple-itunes-app" content="app-id=XXXXXXXXXX, app-argument=${pageUrl}">
-    -->
+    <meta name="apple-itunes-app" content="app-id=6752503448, app-argument=${pageUrl}">
 
     <!-- Cloudflare Web Analytics (manual beacon; skip if auto-injected)
     <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "TODO"}'></script>
@@ -305,15 +302,12 @@ ${quotes.map(quoteItemHtml).join('\n')}
                 <img src="/images/app-icon.png" alt="Quips app icon" class="cta-icon app-icon-light" width="512" height="512" loading="lazy"><img src="/images/app-icon-dark.png" alt="Quips app icon" class="cta-icon app-icon-dark" width="512" height="512" loading="lazy">
                 <h2 class="cta-title">Add this collection to your library</h2>
                 <p class="cta-subtitle">Get Quips and add ${escapeHtml(name)} to your library with one tap.</p>
-                <span class="btn btn-coming-soon">Coming Soon to the App Store</span>
-                <!-- TODO(launch): swap in badge linking to /go/appstore.html?p=collection
-                     data-collection-id lets js/main.js's initDeepLinkBadges()
+                <!-- data-collection-id lets js/main.js's initDeepLinkBadges()
                      try the quips://public-collection/<id> scheme first and
-                     fall back to this href if the app isn't installed.
+                     fall back to this href if the app isn't installed. -->
                 <a href="/go/appstore.html?p=collection" class="app-store-badge" data-collection-id="${escapeHtml(collection.id)}">
                     <img src="/images/app-store-badge.svg" alt="Download on the App Store" width="120" height="40">
                 </a>
-                -->
             </div>
         </section>
     </main>

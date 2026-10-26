@@ -593,8 +593,8 @@
     // doesn't open within DEEP_LINK_TIMEOUT_MS. Detection: if opening the
     // scheme backgrounds the tab (visibilitychange/pagehide fires) before the
     // timeout, the app handled it and the fallback navigation is skipped.
-    // No-op today — badges only get data-collection-id once the TODO(launch)
-    // comment around them is uncommented in scripts/build-collections.mjs.
+    // Only the generated pages from scripts/build-collections.mjs carry
+    // data-collection-id; collection.html renders its badge after load.
     const DEEP_LINK_TIMEOUT_MS = 1500;
 
     function openInQuips(link) {

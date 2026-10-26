@@ -2055,7 +2055,7 @@ a {
 
 /* =========================================================================
    Homepage relaunch additions (2026-07)
-   Hero eyebrow, Coming Soon pill, secondary button, feature-card link,
+   Hero eyebrow, secondary button, feature-card link,
    featured collection of the week, pricing strip, FAQ.
    ========================================================================= */
 
@@ -2071,16 +2071,6 @@ a {
 
 .dark-theme .hero-eyebrow {
     color: var(--accent-ink);
-}
-
-/* Coming Soon pill (non-link placeholder for the App Store badge) */
-.btn-coming-soon {
-    background-color: var(--bg-secondary);
-    color: var(--text-secondary);
-    border: 1px solid var(--border-color);
-    border-radius: 999px;
-    cursor: default;
-    user-select: none;
 }
 
 /* Secondary (outlined/ghost) button */
