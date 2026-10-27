@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 20, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 26, 2026
 
 > **In simple terms:**
 >
@@ -48,6 +48,7 @@ The App does not automatically collect information that identifies you. The foll
 - **iCloud Data:** If iCloud is turned on for Quips in your device settings, your quote data is synced to your personal iCloud account (managed by Apple, not us)
 - **Purchase Information:** If you make in-app purchases, transaction data is processed by Apple through the App Store. The App checks your subscription status with Apple on your device; we do not receive your name, Apple Account, or payment information
 - **Crash and Performance Diagnostics:** If the App crashes, freezes, or runs slowly, it sends a diagnostic report to Sentry — see [Crash and Performance Reporting](#crash-reporting) below
+- **Maps and Place Lookups:** When you search for a place, use your current location to name one, or open a quote that has a place, the App asks Apple Maps for results or map tiles. Those requests carry your search text or the place's coordinates, are handled by Apple, and we do not receive them — see [Apple Services](#apple-services) below
 - **Requests for Public Content:** When the App downloads public content such as Collections, announcements, FAQs, or these legal documents, our hosting providers receive ordinary request information — see [Data the App Requests From Our Website](#app-requests) below
 
 This is the complete list. Nothing else leaves your device without you asking it to.
@@ -175,12 +176,13 @@ If you open a link from an in-app announcement, the web page loads inside the Ap
 
 ## Third-Party Services
 
-### Apple Services
+### Apple Services {#apple-services}
 
 We use the following Apple services:
 
 1. **App Store / StoreKit:** For in-app purchases and subscriptions (subject to [Apple's Privacy Policy](https://www.apple.com/legal/privacy/))
 2. **iCloud / CloudKit:** For optional data synchronization (subject to [Apple's iCloud Privacy Policy](https://www.apple.com/legal/privacy/))
+3. **Apple Maps / MapKit:** For searching for a place, naming a spot from your location, and showing a quote's place on a map (subject to [Apple's Privacy Policy](https://www.apple.com/legal/privacy/))
 
 ### Crash and Performance Reporting {#crash-reporting}
 
