@@ -45,6 +45,18 @@ jobs:
 
       - uses: ./.github/actions/build-site
 
+      # spec/quote-markup.md is a verbatim copy of SPEC.md in the private quote-markup
+      # repo, which owns the spec; .spec-version pins the commit it was copied from. The
+      # checksum half needs no secret. The comparison with the source needs
+      # QUOTE_MARKUP_TOKEN (a fine-grained token with Contents: read on
+      # TweetingBirds/quote-markup); a run without it (a fork's PR) warns instead of
+      # skipping silently. See scripts/sync-spec.mjs.
+      - name: Check the Quote Markup spec matches its pinned source
+        shell: bash
+        env:
+          QUOTE_MARKUP_TOKEN: ${{ secrets.QUOTE_MARKUP_TOKEN }}
+        run: node scripts/sync-spec.mjs --check
+
       # PR-only sanity check, not part of a deploy: assert that the outputs the
       # live site depends on exist and are not empty, and log how many files the
       # Save and spec directories got so a reviewer can see a surprise.

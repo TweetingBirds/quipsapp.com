@@ -27,9 +27,13 @@ When a real person says their own words, as in a speech or an interview, there i
 Rules:
 
 - `p-content` holds the quotation only, without surrounding quotation marks or the attribution.
-- `p-author` may repeat; readers join the names with a comma.
+- `p-author` may repeat. A reader keeps the names as a list, in page order, and does not join them: a name can contain a comma ("Martin Luther King, Jr."), so a joined string cannot be split back into names. Joining for display is the reader's own concern.
+- Properties belong to the nearest microformat root. A `p-name` or `u-url` inside a nested `h-card` (an author's) or a nested `h-cite` is that item's property, not the quote's. The element that carries both `p-author` and `h-card` is itself the quote's `p-author`.
 - `p-x-spoken-by-character` is the character as the work credits them. It mirrors `spokenByCharacter`, whose value is a Person or Organization. Leave it out when the author is the one speaking, including real people in speeches and interviews.
-- `dt-published` takes any ISO 8601 date **or a partial one**: `1997`, `1997-11`, `1997-11-04`. A reader must keep the precision it is given and must not invent a month or day.
+- `dt-published` takes any ISO 8601 date **or a partial one**: `1997`, `1997-11`, `1997-11-04`. A reader must keep the precision it is given and must not invent a month or day. A full datetime is allowed (`2024-03-05T14:30:00-05:00`); a reader takes its date part (`2024-03-05`) and drops the time and offset.
+- An **approximate or BCE date** goes in the element's text (`c. 1906`, `44 BC`, `6th century`), with the best machine value, if there is one, in `datetime` (`1906`, `-0044`). A reader prefers the text when it carries a circa or era marker (`c.`, `ca.`, `circa`, `BC`, `BCE`, `AD`, `CE`, `century`), and otherwise the `datetime` value, then the text.
+- In JSON-LD, `datePublished` is a string or a number; a typed value (`{"@type": "Date", "@value": "1990"}`) is read as its `@value` string. Any other kind of value is ignored.
+- `url` is an absolute address of at most 2,048 characters. A reader ignores a longer one.
 - The `p-x-` names are placeholders pending the microformats process (§7).
 
 ## 3. HTML example
@@ -115,7 +119,7 @@ https://quipsapp.com/save?text=…&author=…&work=…&type=movie&date=1997&url=
 | Parameter | Meaning |
 |---|---|
 | `text` (required) | The quoted words. |
-| `author` | Who wrote or said it, as credited. |
+| `author` | Who wrote or said it, as credited. Repeat the parameter for several authors: `author=Carter%20Crocker&author=Karl%20Geurs`. |
 | `character` | The character the work attributes the quote to, when not the author. |
 | `work` | Title of the source. |
 | `type` | A source-type value from §4. |
@@ -138,7 +142,7 @@ Everything a page says about a quote is **the page's claim**. A conforming reade
 
 - shows third-party fields as the publisher's, never as its own research;
 - never displays a verification, accuracy or "checked" badge because a link or page says so. A `verification` parameter is ignored. A publisher's own standing, if carried at all, belongs in the notes as text ("Marked verified by example.com");
-- caps the length of every field, treats all of it as untrusted text, and escapes it wherever it is displayed;
+- caps the length of every field and the number of authors, treats all of it as untrusted text, and escapes it wherever it is displayed. The reference reader reports at most 10,000 characters for a field, 200 for a name, 2,048 for a URL and 10 authors;
 - when reading a page the person is looking at, requires the quote to match what they selected, if they selected anything, so a page cannot substitute a different attribution than the words in front of the person;
 - may refuse a quote with no `text`.
 
