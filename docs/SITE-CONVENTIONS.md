@@ -22,7 +22,7 @@ the Email Course nav item, press.html had a different footer encoding, etc.).
 | `press.html` | Press kit | |
 | `privacy.html` | Privacy policy | **Generated** by `scripts/build-legal.mjs` from `legal/privacy.md` — never hand-edit; edit the Markdown |
 | `terms.html` | Terms & conditions | **Generated** by `scripts/build-legal.mjs` from `legal/terms.md` — never hand-edit; edit the Markdown |
-| `spec/quote-markup.html` | Quote Markup spec | **Generated** by `scripts/build-spec.mjs` from `spec/quote-markup.md` — edit the Markdown. Reuses the legal pages' shell |
+| `spec/quote-markup.html` | Quote Markup spec | **Generated** by `scripts/build-spec.mjs` from `spec/quote-markup.md`, which is a verbatim copy of `SPEC.md` in the private `quote-markup` repo — do not edit it here; run `node scripts/sync-spec.mjs --update` (PR builds check it against `.spec-version`). Reuses the legal pages' shell |
 | `404.html` | GitHub Pages not-found page | `noindex`; all paths root-absolute (it renders at any missing URL depth) |
 
 ## Canonical `<head>` requirements (every page)
@@ -530,7 +530,7 @@ see "Legal documents" below.
 names what it ships: the directories `.well-known collections css go images js
 legal quote-unquote save spec`, every root `*.html`, and the root files listed
 in the "Archive site (allowlist)" step. Everything else stays in the repo only:
-`.data-version`, `.gitignore`, `.github/`, `docs/`, `scripts/`, `serve.sh`, and
+`.data-version`, `.spec-version`, `.gitignore`, `.github/`, `docs/`, `scripts/`, `serve.sh`, and
 any dotfile, including one nested inside a published directory (the step fails
 the build on that, so a stray `.env` can't go live).
 
