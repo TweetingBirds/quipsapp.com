@@ -9,8 +9,11 @@ name: Site PR build
 # PR's merge result: JSON validation, the pinned collections pull, and every
 # build and check script.
 #
-# Read-only on purpose: contents: read, no Pages permissions, no secrets, and
-# nothing is uploaded or deployed. The pinned data is public (data.quipsapp.com).
+# Read-only on purpose: contents: read, no Pages permissions, and nothing is
+# uploaded or deployed. The pinned data is public (data.quipsapp.com). The one
+# secret is QUOTE_MARKUP_TOKEN, a read-only token for the private quote-markup
+# repo that the spec check compares against; a PR without it (a fork's, or
+# Dependabot's) still runs, with that comparison skipped and a warning.
 #
 # Make "Site build" a required check under Settings -> Branches. There is
 # deliberately no `paths:` filter: a required check that is skipped for some PRs
