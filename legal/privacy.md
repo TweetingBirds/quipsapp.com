@@ -1,10 +1,10 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 26, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** October 29, 2026
 
 > **In simple terms:**
 >
-> - Your quotes stay on your device
+> - Your quotes, and the photos, recordings, and places you add to them, stay on your device
 > - If iCloud is on for Quips, your data syncs through your personal iCloud account, which we can't see
 > - The Quips app has no ads, no tracking, and no analytics that watch what you do in it
 > - The app does send crash and performance reports that aren't linked to you, so we can find and fix bugs
@@ -33,9 +33,22 @@ When you use Quips, you may provide the following information. It is stored in t
 - **Quotes and Content:** Text content of quotes, notes, and sources you create, including text you share into the App from other apps or paste from your clipboard
 - **Authors:** Names and information about quote authors you add, such as a short bio and dates
 - **Tags and Collections:** Tags and collections you create to organize your quotes, and the Public Collections you add
+- **Photos:** Photos you add to a quote, whether from your photo library, your camera, or a page you scan, with any caption you write and the text the App reads from them so that search can find it
+- **Recordings:** Voice recordings you make in the App or share into it from another app, such as Voice Memos, with a transcript of what was said. A recording keeps everything the microphone picked up, including other people's voices
+- **Places:** Where a quote was said: the name you give the place and, when you pick it from a search or choose Use Current Location, its map coordinates
 - **App Settings:** Your preferences for app appearance, themes, colors, Share Studio styles, widgets, and Daily Quote schedules
 
 The App reads your clipboard only when you ask it to, such as when you choose to create a new quote from the clipboard.
+
+### Photos, Recordings, and Places {#photos-recordings-places}
+
+Photos, recordings, and places are kept with their quote, in the same places as the rest of your library: on your device, and in the private database of your iCloud account if iCloud is on for Quips. They move to Recently Deleted with their quote and are removed with it, Delete All Data removes them, and a backup you export from Settings > Import & Export includes them. They are never part of a crash or performance report, and we never receive them.
+
+Before a photo is stored, the App redraws it from its pixels and keeps none of the information your camera wrote into the file (its EXIF metadata), such as where the photo was taken (its GPS location), the device, or the time. Where a quote was said is recorded only in its place, which you set and can see. You choose photos in Apple's photo picker, so the App sees only the photos you pick, never the rest of your library. When you scan a page and turn off Keep the Photo, only the text is kept.
+
+Reading the text on a page or in a photo, and transcribing a recording, happen on your device, with Apple's Vision and Speech frameworks. The photo or recording is not sent to us, or to anyone else, to do it. The first time you transcribe a recording in a language, your device may download Apple's speech model for that language; the download carries nothing from your recordings.
+
+Use Current Location takes a single reading of your location, only when you choose it, and only with your permission to use your location while the App is in use. The App never follows your location and never uses it in the background. If you allow only your approximate location, the place is named after your city. To put a name to the spot, its coordinates are sent to Apple Maps, as described under Maps and Place Lookups below.
 
 ### Information You Send Us
 
@@ -58,7 +71,7 @@ This is the complete list. Nothing else leaves your device without you asking it
 Within the Quips app itself, we want to be clear about what we don't collect:
 
 - The App does not collect your name, email address, or contact information (we only see these if you email us)
-- The App does not track your location, and it never uses your location, camera, microphone, or photo library in the background. A feature that needs one of them uses it only when you choose that feature, and only after your device asks your permission. Anything it captures is kept with that quote in your library, on your device (and in your iCloud account if iCloud is on for Quips), and we never receive it
+- The App does not track your location, and it never uses your location, camera, microphone, or photo library in the background. A feature that needs one of them uses it only when you choose that feature, and only after your device asks your permission. Anything it captures is kept with that quote in your library, on your device (and in your iCloud account if iCloud is on for Quips), and we never receive it — see [Photos, Recordings, and Places](#photos-recordings-places)
 - The App does not access your contacts
 - The App does not collect device identifiers for tracking purposes
 - The App does not use advertising networks, ad tracking, or an advertising identifier
@@ -192,7 +205,7 @@ What a report contains: the type of crash or slowdown, where in our code it happ
 
 Reports are not linked to your identity or your account, and are never used to track you or to build a profile of you. Because each report carries the installation identifier, reports from the same installation can be grouped together, but the identifier is not connected to your name, your email address or any account. Performance reports are sampled, so only a fraction of what the App measures is ever sent, and a session in which nothing crashed or froze may send nothing at all. Sentry's session tracking, which would report each time the App is opened and how long it stays open, is switched off. Diagnostics are sent only from release versions of the App — the App Store version and TestFlight betas; builds we run during development report nothing. Where the law requires a legal basis, we rely on our legitimate interest in keeping the App stable and working. The App does not currently have a setting to turn these reports off; because they contain none of your content and are not linked to you, we consider this a fair balance, but you may contact us with any objection.
 
-This is what the App's privacy label on the App Store declares as Crash Data and Performance Data, and it is the only information the App reports about your use of it. (Downloading public content — Collections, announcements, these legal documents — also produces ordinary server request logs at our hosting providers, described under [Website](#website-newsletter) above.) See [Sentry's Privacy Policy](https://sentry.io/privacy/) for details.
+This is what the App's privacy label on the App Store declares as Crash Data, Performance Data, and Other Diagnostic Data, and it is the only information the App reports about your use of it. (Downloading public content — Collections, announcements, these legal documents — also produces ordinary server request logs at our hosting providers, described under [Website](#website-newsletter) above.) See [Sentry's Privacy Policy](https://sentry.io/privacy/) for details.
 
 ### No Advertising or Tracking
 
