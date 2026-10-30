@@ -1,6 +1,6 @@
 {
-  "version": "2.0",
-  "lastUpdated": "2026-10-20",
+  "version": "2.2",
+  "lastUpdated": "2026-10-29",
   "sections": [
     {
       "id": "getting-started",
@@ -9,12 +9,12 @@
         {
           "id": "add-quote",
           "question": "How do I add a new quote?",
-          "answer": "On iPhone, tap + in the bar at the bottom of the screen. On iPad and Mac — and on an iPhone turned sideways — + sits in the toolbar at the top. With a keyboard, Command-N starts a new quote and Shift-Command-N starts one from whatever is on your clipboard. Only the quote itself is required; the author, tags, source, notes and collection are all optional, and you can add them later."
+          "answer": "On iPhone, tap + in the bar at the bottom of the screen. On iPad and Mac — and on an iPhone turned sideways — + sits in the toolbar at the top. With a keyboard, Command-N starts a new quote and Shift-Command-N starts one from whatever is on your clipboard. On iPhone and iPad you can also touch and hold the Quips icon on the Home Screen and choose New Quote. Only the quote itself is required; the author, tags, source, notes and collection are all optional, and you can add them later."
         },
         {
           "id": "capture-from-other-apps",
           "question": "Can I save a quote straight from another app?",
-          "answer": "Yes, on iPhone and iPad. Select the text in Safari, Books, Notes, Mail or anywhere else that shares text, tap Share, then choose Quips. The quote arrives in a small editor where you can set the author, tags and collection before saving. If the text includes a link, Quips offers to move it to the Source field instead of leaving it in the quote."
+          "answer": "Yes, on iPhone and iPad. Select the text in Safari, Books, Notes, Mail or anywhere else that shares text, tap Share, then choose Quips. The quote arrives in a small editor where you can set the author, tags and collection before saving. If the text includes a link, Quips offers to move it to the Source field instead of leaving it in the quote. Share a voice memo the same way and what was said becomes the quote."
         },
         {
           "id": "favorite-quote",
@@ -29,7 +29,7 @@
         {
           "id": "search-quotes",
           "question": "How do I search for quotes?",
-          "answer": "On iPhone, the search field is in the bar at the bottom of the screen. On iPad and Mac it's in the toolbar, and Command-F puts the cursor in it. Search covers quote text, authors, tags, sources and notes, and you can narrow the results by scope once you start typing. Search is free — every part of it, on every plan."
+          "answer": "On iPhone, the search field is in the bar at the bottom of the screen. On iPad and Mac it's in the toolbar, and Command-F puts the cursor in it. Search covers quote text, authors, tags, sources, notes and places, along with the words in a quote's photos and recordings, and you can narrow the results by scope once you start typing — Places is one of them. Search is free — every part of it, on every plan."
         },
         {
           "id": "undo",
@@ -81,6 +81,37 @@
           "id": "source-type",
           "question": "Can I note where a quote came from?",
           "answer": "Yes. While creating or editing a quote, tap the source row to choose a type — book, movie, podcast, speech, comic and more — and add the free-text source alongside it. The type shows as a matching icon on the quote throughout the app, and the sidebar can group your library by it."
+        }
+      ]
+    },
+    {
+      "id": "photos-recordings-places",
+      "title": "Photos, Recordings & Places",
+      "faqs": [
+        {
+          "id": "scan-text",
+          "question": "Can I scan a quote off a page?",
+          "answer": "Yes, with Scan Text. While adding a quote, tap the camera button in the quote field, or touch and hold + and choose Scan Text (on a Mac, Control-click +). Take a photo of the page or choose one, tap the lines that make up the quote — pinch to zoom in on small print, or Crop to the part you want — then tap Use Text. A page number at the edge of the page becomes the source, and Keep the Photo saves the page with the quote while it has room for a photo. On a Mac, choose a photo, or use File > Import from iPhone or iPad to take one with your iPhone. The Add Quote from Photo shortcut does the same with a photo you pick — ask Siri to “Scan a quote with Quips.” The text is read on your device, and Scan Text is free on every plan."
+        },
+        {
+          "id": "photos",
+          "question": "Can I keep a photo with a quote?",
+          "answer": "Yes — the page it was on, the slide, whoever said it. In the editor, tap Add Photo in the Photos section, or drop or paste an image there. Tap a photo on the quote to see it full size, page between them, zoom, add a caption or delete one. Once a quote has a photo, Photos appears in the sidebar and shows just those quotes, and Share Studio can set the photo behind the card. A quote keeps one photo on the free plan and up to ten with Premium. Photos sync through iCloud with the rest of your library, and Quips leaves out a photo's location and camera details when it saves it."
+        },
+        {
+          "id": "recordings",
+          "question": "Can I record the way a quote was said?",
+          "answer": "Yes, with Premium. While adding a quote, tap the microphone button in the quote field, or touch and hold + and choose Record (on a Mac, Control-click +). A recording runs for up to two minutes, and Quips writes the words into the quote for you. On iPhone and iPad you can also share a voice memo to Quips from Voice Memos or another app. A quote keeps up to ten recordings to play back, and Recordings in the sidebar shows every quote that has one. The words are written down on your device. The first time, your language's speech model may still be downloading, so an early recording can come back without words; the recording is kept either way. On the free plan, sharing a recording still saves what was said as the quote; keeping the recording needs Premium."
+        },
+        {
+          "id": "places",
+          "question": "Can I note where a quote was said?",
+          "answer": "Yes. In the editor, tap Place under the date. Search for a place, tap Use Current Location, or keep what you typed as a name of your own, like Grandma's kitchen. The quote shows its place, and a small map that opens Maps. Map in the sidebar puts your placed quotes on one map — tap a marker to see its quotes. A name you typed yourself has no spot on the map, so it shows on the quote but not on Map. Search has a Places scope, and Share Studio can add the place to the card's date line. Places are free on every plan. Quips asks for your location only when you tap Use Current Location, and uses it once."
+        },
+        {
+          "id": "attachments-other-devices",
+          "question": "Why don't my photos, recordings or places show on my other device?",
+          "answer": "Update Quips on it. Photos, recordings and places arrived in Quips 2.2, and a device still on 2.1 or earlier doesn't show them. If it's up to date, give iCloud a little time: photos and recordings are larger than quotes and can take longer to arrive."
         }
       ]
     },
@@ -204,7 +235,7 @@
         {
           "id": "sidebar",
           "question": "What's in the sidebar, and can I change it?",
-          "answer": "The sidebar holds the places in your library: All Quotes, Favorites, Discover and Recently Deleted, then sections for your collections, tags, authors and source types. Each section lists the five you use most, with a row at the foot leading to the full list. It sits beside your library wherever the window is wide enough; on iPhone, tap Back from the library to reach it. Choose Customize Sidebar — from the sidebar itself, or from the View menu — to turn off the sections you don't navigate by."
+          "answer": "The sidebar holds the places in your library: All Quotes, Discover, Favorites, On This Day and Recently Deleted, joined by Photos, Recordings and Map once a quote has a photo, a recording or a place on the map. Then come sections for your collections, tags, authors and source types. Each section lists the five you use most, with a row at the foot leading to the full list. It sits beside your library wherever the window is wide enough; on iPhone, tap Back from the library to reach it. Choose Customize Sidebar — from the sidebar itself, or from the View menu — to turn off the sections you don't navigate by."
         },
         {
           "id": "keyboard-shortcuts",
@@ -297,7 +328,7 @@
         {
           "id": "backup",
           "question": "How do I back up my quotes?",
-          "answer": "Your library syncs to iCloud automatically as long as iCloud is on for Quips, so it's already backed up and already on your other devices. For a copy you keep yourself, open Settings > Import & Export and export to a file — a JSON file holding every quote, author, tag and collection."
+          "answer": "Your library syncs to iCloud automatically as long as iCloud is on for Quips, so it's already backed up and already on your other devices. For a copy you keep yourself, open Settings > Import & Export and export to a file. A library without photos or recordings is saved as a JSON file holding every quote, author, tag and collection. Once any quote has a photo or a recording, the export is a Quips archive instead — a .quipsarchive file that keeps them too. Import & Export reads both."
         },
         {
           "id": "import",
@@ -322,7 +353,7 @@
         {
           "id": "delete-everything",
           "question": "How do I delete all my data?",
-          "answer": "Settings > Import & Export has Delete All Data, which removes every quote, author and tag permanently. It can't be undone and it isn't in Recently Deleted afterwards, so export a copy first if there's any chance you'll want one."
+          "answer": "Settings > Import & Export has Delete All Data, which permanently removes every quote, author, tag, photo and recording, your search history, and every collection you made. The built-in Personal and Public Quotes collections stay, empty. It can't be undone and it isn't in Recently Deleted afterwards, so export a copy first if there's any chance you'll want one."
         }
       ]
     },
@@ -333,12 +364,12 @@
         {
           "id": "free-tier",
           "question": "What do I get without a subscription?",
-          "answer": "A working quote library: up to 100 quotes, the Personal collection, one collection added from Discover, one Daily Quote schedule, every widget, all of Share Studio apart from turning off the watermark, and search — all of it, including searching by author, tag and source."
+          "answer": "A working quote library: up to 100 quotes, one photo on each, places and Scan Text, the Personal collection, one collection added from Discover, one Daily Quote schedule, every widget, all of Share Studio apart from turning off the watermark, and search — all of it, including searching by author, tag, source and place."
         },
         {
           "id": "premium-features",
           "question": "What's included in Premium?",
-          "answer": "Unlimited quotes, up to 25 collections of your own and more from Discover, the full set of quote styles, text colors and typefaces, every theme color and favorite icon, watermark-free sharing in Share Studio, alternate app icons, and up to 10 Daily Quote schedules. It's $2.49 a month or $19.99 a year, and it covers iPhone, iPad and Mac. App icons and extra Daily Quote schedules are iPhone and iPad features, so the Mac doesn't offer them."
+          "answer": "Unlimited quotes, up to ten photos and ten recordings on each quote, up to 25 collections of your own and more from Discover, the full set of quote styles, text colors and typefaces, every theme color and favorite icon, watermark-free sharing in Share Studio, alternate app icons, and up to 10 Daily Quote schedules. It's $2.49 a month or $19.99 a year, and it covers iPhone, iPad and Mac. App icons and extra Daily Quote schedules are iPhone and iPad features, so the Mac doesn't offer them."
         },
         {
           "id": "restore-purchases",
@@ -374,7 +405,7 @@
         {
           "id": "save-opened-web-page",
           "question": "I tapped Add quote to Quips and got a web page, not the app.",
-          "answer": "That's expected for now. The button links to a page on quipsapp.com, and with Quips 2.1 or earlier that link opens in your browser even when the app is installed. Tap Open in Quips on the page and the quote opens in Quips, ready to save. An update after 2.1 lets the button open Quips directly; without the app, you'll still land on the page."
+          "answer": "With Quips 2.1 or earlier, that's expected. The button links to a page on quipsapp.com, and those versions open that link in your browser even when the app is installed. Tap Open in Quips on the page and the quote opens in Quips, ready to save. Update to Quips 2.2 and the button opens Quips directly; without the app, you'll still land on the page."
         },
         {
           "id": "unsubscribe",

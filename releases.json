@@ -1,30 +1,86 @@
 {
-  "version": "2.1",
-  "lastUpdated": "2026-10-20",
+  "version": "2.2",
+  "lastUpdated": "2026-10-29",
   "highlight": {
-    "title": "Quips, Now on Mac and iPad",
-    "summary": "Version 2.0 rebuilds Discover, gives your authors, tags and sources screens of their own, and lets you undo a delete, an edit, even a favorite.",
+    "title": "Keep the Moment, Not Just the Words",
+    "summary": "Version 2.2 lets a quote keep more than what was said: the page it came from, the voice that said it and the place you heard it.",
     "points": [
       {
-        "title": "On Your Mac",
-        "detail": "A sidebar, a menu bar, real windows, and the shortcuts to drive them"
+        "title": "The Page It Came From",
+        "detail": "Point your camera at a page, and Quips keeps the line and the page it was printed on"
       },
       {
-        "title": "Room to Spread Out",
-        "detail": "A bigger window shows more of your library, and tidies up when you shrink it"
+        "title": "The Voice That Said It",
+        "detail": "Record a quote as it's said, and keep the voice, not just the words"
       },
       {
-        "title": "See Where a Quote Came From",
-        "detail": "Every quote in Discover tells you how solid its attribution is"
+        "title": "Where You Heard It",
+        "detail": "Give a quote a place, and see where your whole library was said on a map"
       }
     ]
   },
   "releases": [
     {
+      "version": "2.2",
+      "name": "Photos, Recordings & Places",
+      "date": "November 2026",
+      "latest": true,
+      "summary": "A quote can keep the page it came from, the voice that said it and the place you heard it. Scan the words straight off a page, and see where your quotes were said on a map.",
+      "features": [
+        {
+          "title": "Scan Text",
+          "detail": "Tap the camera in the quote field, take a photo of the page, then tap the lines that make up the quote. Quips types them in, takes the page number as the source, and can keep the photo too. Pinch to zoom in on small print."
+        },
+        {
+          "title": "Photos",
+          "detail": "Keep the page, the slide or whoever said it with the quote. Page through the photos full size, give each one a caption, find every quote that has one under Photos in the sidebar, or set one behind the card in Share Studio. A quote keeps one photo on the free plan, and up to ten with Premium."
+        },
+        {
+          "title": "Recordings",
+          "detail": "Tap the microphone and record a quote as it's said, for up to two minutes. Quips writes down the words on your device and keeps the clip with the quote to play back, and Recordings in the sidebar gathers them. Recordings come with Premium."
+        },
+        {
+          "title": "Share a Recording",
+          "detail": "Share a voice memo to Quips and what was said becomes the quote. With Premium, the recording stays with it."
+        },
+        {
+          "title": "Places",
+          "detail": "Note where a quote was said: search for a place, use where you are, or type a name of your own. The quote shows it on a small map, and Map in the sidebar puts all your quotes' places on one."
+        },
+        {
+          "title": "Search by Place",
+          "detail": "Search has a Places scope, and it now finds a quote by the words in its photos and recordings too."
+        },
+        {
+          "title": "Add Quote from Photo",
+          "detail": "A new Shortcuts action reads the text in a photo and saves it as a quote, photo and all. Or ask Siri to “Scan a quote with Quips.”"
+        },
+        {
+          "title": "New Quote from the Home Screen",
+          "detail": "Touch and hold the Quips icon and choose New Quote to start writing straight away."
+        },
+        {
+          "title": "Backups That Keep Photos and Recordings",
+          "detail": "Export a library with photos or recordings and it's saved as a Quips archive, which keeps them along with your quotes. Import & Export reads it back on any device."
+        },
+        {
+          "title": "On This Day, From Your Library",
+          "detail": "Give a quote a full date and it comes back every year on that day. On This Day in the sidebar shows today, a calendar or the days coming up, and a date Quips filled in for you waits until you confirm it."
+        },
+        {
+          "title": "Straight From the Newsletter",
+          "detail": "Tap Add quote to Quips in a Quote Unquote email and Quips opens on the quote, ready to save, instead of a web page."
+        },
+        {
+          "title": "Clear of the Fold",
+          "detail": "On iPhone Duo's inner display, cards sit either side of the fold, never across it."
+        }
+      ]
+    },
+    {
       "version": "2.1",
       "name": "Made for iPhone Duo",
       "date": "October 2026",
-      "latest": true,
       "summary": "Quips fills both of iPhone Duo's displays, with your library on one side and the quote you're reading on the other.",
       "features": [
         {
