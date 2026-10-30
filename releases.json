@@ -2,20 +2,20 @@
   "version": "2.2",
   "lastUpdated": "2026-10-29",
   "highlight": {
-    "title": "Quips, Now on Mac and iPad",
-    "summary": "Version 2.0 rebuilds Discover, gives your authors, tags and sources screens of their own, and lets you undo a delete, an edit, even a favorite.",
+    "title": "Keep the Moment, Not Just the Words",
+    "summary": "Version 2.2 lets a quote keep more than what was said: the page it came from, the voice that said it and the place you heard it.",
     "points": [
       {
-        "title": "On Your Mac",
-        "detail": "A sidebar, a menu bar, real windows, and the shortcuts to drive them"
+        "title": "The Page It Came From",
+        "detail": "Point your camera at a page, and Quips keeps the line and the page it was printed on"
       },
       {
-        "title": "Room to Spread Out",
-        "detail": "A bigger window shows more of your library, and tidies up when you shrink it"
+        "title": "The Voice That Said It",
+        "detail": "Record a quote as it's said, and keep the voice, not just the words"
       },
       {
-        "title": "See Where a Quote Came From",
-        "detail": "Every quote in Discover tells you how solid its attribution is"
+        "title": "Where You Heard It",
+        "detail": "Give a quote a place, and see where your whole library was said on a map"
       }
     ]
   },
