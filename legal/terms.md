@@ -175,12 +175,12 @@ Premium subscriptions unlock:
 - Unlimited quotes
 - All Quote Style colors and typefaces
 - Watermark-free sharing in Share Studio
-- Photos and recordings on your quotes, up to 10 of each per quote
+- Photos and recordings on quotes
 - Up to 10 Daily Quote schedules (iPhone and iPad only)
 - Full access to all theme colors and favorite icons
 - Custom app icon selection (iPhone and iPad only)
 - Up to 25 Private Collections and 100 Public Collections
-- Tidy Library, including reviewing the dates the App filled in, and suggested tags and collections on a device that supports Apple Intelligence
+- Tidy Library, including confirming the dates the App filled in (its suggestions require a device that supports Apple Intelligence)
 - Future premium features as they become available
 
 Every quote in your library counts toward the free plan's 100-quote limit, including quotes added from Public Collections. If your Premium subscription ends, you keep every quote you saved, and you can still export your library, but you cannot add new quotes while you are over the free plan's limit.
