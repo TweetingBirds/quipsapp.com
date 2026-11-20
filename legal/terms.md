@@ -173,9 +173,9 @@ The free plan includes up to 100 saved quotes, search, Share Studio, widgets, on
 Premium subscriptions unlock:
 
 - Unlimited quotes
+- Photos and recordings on quotes
 - All Quote Style colors and typefaces
 - Watermark-free sharing in Share Studio
-- Photos and recordings on quotes
 - Up to 10 Daily Quote schedules (iPhone and iPad only)
 - Full access to all theme colors and favorite icons
 - Custom app icon selection (iPhone and iPad only)
