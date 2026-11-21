@@ -354,6 +354,8 @@ const STATIC_PAGES = [
     'quote-unquote/3-hall.html',
     'quote-unquote/4-baudelaire.html',
     'quote-unquote/5-roosevelt.html',
+    'quote-unquote/6-santayana.html',
+    'quote-unquote/7-chief-seattle.html',
     'support.html',
     'releases.html',
     'press.html',
