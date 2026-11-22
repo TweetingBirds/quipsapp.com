@@ -101,23 +101,24 @@ In this order, after charset/viewport:
 ## Content Security Policy (every page)
 
 Every page carries a CSP `<meta http-equiv>` tag. Two variants — the only
-difference is MailerLite in `connect-src` on pages with signup forms. Never
-add MailerLite hosts to `script-src` (we don't load their scripts), and keep the
+difference is Cloudflare Turnstile (`challenges.cloudflare.com` in `script-src`
+and `frame-src`) on pages with signup forms. Never add MailerLite hosts to any
+directive (the browser never talks to MailerLite; `/api/subscribe` does), and keep the
 Cloudflare Insights hosts so the analytics beacon works when enabled. Fonts are
 self-hosted, so `style-src` and `font-src` name no external host; do not add one
 back (the privacy policy promises there is no third-party font service).
 
-Pages **with** MailerLite forms (`index.html`, `course.html`, `quote-unquote.html`,
+Pages **with** signup forms (`index.html`, `course.html`, `quote-unquote.html`,
 and every `quote-unquote/<n>-<slug>.html` edition — each ends with a subscribe
 form):
 
 ```
-default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://assets.mailerlite.com https://cloudflareinsights.com; form-action 'self'; base-uri 'self'; object-src 'none';
+default-src 'self'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://cloudflareinsights.com; frame-src https://challenges.cloudflare.com; form-action 'self'; base-uri 'self'; object-src 'none';
 ```
 
 All other pages (and the generated collection template in
 `scripts/build-collections.mjs`): same policy minus
-`https://assets.mailerlite.com` in `connect-src`. `form-action` is `'self'` on
+`https://challenges.cloudflare.com` in `script-src` and the whole `frame-src`. `form-action` is `'self'` on
 every page: the signup forms are submitted by `js/main.js` with `fetch`, never
 by the browser (see Forms below).
 
@@ -262,15 +263,24 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
 
 ## Forms (MailerLite)
 
-- We POST directly to MailerLite's subscribe endpoints from `js/main.js`.
-  **Never** load MailerLite scripts (`webforms.min.js`) or their `takel`
-  tracking pixel — the site must not run third-party trackers.
+- `js/main.js` POSTs JSON (`kind`, `email`, `name`, Turnstile `token`) to
+  `/api/subscribe`, the Cloudflare Worker in `workers/signup/` (deployed on its
+  own; see its README). The Worker checks the Turnstile token server-side, then
+  passes the address to MailerLite's form endpoint. **Never** load MailerLite
+  scripts (`webforms.min.js`) or their `takel` tracking pixel — the site must
+  not run third-party trackers — and never put a MailerLite form id or URL back
+  in the site: bots read the old one out of `main.js` and posted to it directly,
+  so double opt-in emailed confirmations to strangers (fixed 2026-11).
 - **The HTML never carries the MailerLite URL.** A signup `<form>` has
   `data-signup="newsletter"` or `"course"`, and its `action` is the page's own
   URL (`/quote-unquote.html`, `/course.html`), so a crawler that replays the form
-  HTML gets nothing. The endpoints, and MailerLite's `ml-submit` and `anticsrf`
-  fields, live in `SIGNUP_ENDPOINTS` in `js/main.js`.
-- **Bot protection, no third parties.** Every signup form carries the honeypot
+  HTML gets nothing. The MailerLite form ids live only in the Worker's secrets.
+- **Turnstile.** `main.js` appends a `.signup-turnstile` slot to each form and
+  renders an `interaction-only` widget there (action = the form's kind), loading
+  Turnstile's script on the first focus or tap inside a form, never on page
+  load. Most people see nothing; a puzzle shows only when Cloudflare is unsure.
+  The public site key is `TURNSTILE_SITE_KEY` in `main.js`.
+- **Page-side checks.** Every signup form carries the honeypot
   block (`<div class="signup-aside" aria-hidden="true">` holding a text input
   named `website`, `tabindex="-1"`, `autocomplete="off"`), plus a `<noscript>`
   note. Copy it from an existing form and give the input a unique id. `main.js`
@@ -295,8 +305,9 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
   confirmation to an active one. Don't add `data-prefill` to other pages.
 - Every email input needs an associated visually-hidden `<label>`
   (`class="sr-only"`), not just a placeholder.
-- Success copy must say "check your inbox to confirm" (double opt-in), since
-  `no-cors` POSTs can't verify acceptance.
+- Success copy must say "check your inbox to confirm" (double opt-in). A
+  rejected or failed signup shows the `.signup-error` line `main.js` adds to
+  the form, with the email-me-by-hand fallback.
 
 ## Copy & naming
 

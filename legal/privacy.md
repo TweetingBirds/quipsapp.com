@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Effective Date:** July 7, 2026 | **Last Updated:** October 29, 2026
+**Effective Date:** July 7, 2026 | **Last Updated:** November 22, 2026
 
 > **In simple terms:**
 >
@@ -173,6 +173,8 @@ When you submit a form, MailerLite also records standard signup details such as 
 
 Nothing is sent to MailerLite unless you actually submit a signup form. Our pages do not load MailerLite scripts or tracking pixels — simply visiting a page with a signup form on it sends nothing to MailerLite.
 
+To keep bots from signing up other people's addresses, our signup forms use **Cloudflare Turnstile**, a privacy-preserving check that you're a person. It loads only when you start using a signup form, usually runs without asking you to do anything, and does not set advertising cookies or track you across sites. Turnstile looks at signals from your browser and connection (such as your IP address) to make that check, and our server confirms the result with Cloudflare before your signup is passed to MailerLite. See [Cloudflare's Turnstile Privacy Addendum](https://www.cloudflare.com/turnstile-privacy-policy/) for details.
+
 ### Cookies and Local Storage
 
 Our website does not set cookies. If you choose a light or dark theme, your browser remembers that choice in its local storage on your device; it is never sent to us.
@@ -215,11 +217,11 @@ This is what the App's privacy label on the App Store declares as Crash Data, Pe
 - We do not use analytics services (e.g., Google Analytics, Firebase) within the App
 - Sentry is the only company the App reports data to, and it receives diagnostics only — never your content
 
-Our website uses two third-party services, described in [Website](#website-newsletter) above: MailerLite (solely to operate the optional newsletter and email-course signups) and Cloudflare Web Analytics (cookieless, aggregate page metrics). Neither of them are used for advertising or cross-site tracking.
+Our website uses three third-party services, described in [Website](#website-newsletter) above: MailerLite (solely to operate the optional newsletter and email-course signups), Cloudflare Turnstile (only on signup forms, to stop automated signups), and Cloudflare Web Analytics (cookieless, aggregate page metrics). None of them are used for advertising or cross-site tracking.
 
 ### Service Providers
 
-The companies that process information on our behalf are Sentry (Functional Software, Inc., United States) for crash and performance diagnostics, MailerLite (European Union) for newsletter and course emails, and Cloudflare and GitHub (United States) for hosting and delivering our website and the App's public content, plus Cloudflare's website analytics. We share with each only what it needs to provide its service. We may also disclose information if the law requires it, to protect our rights or the safety of others, or to a successor if Tweeting Birds or the App is transferred, in which case this policy will continue to apply to that information.
+The companies that process information on our behalf are Sentry (Functional Software, Inc., United States) for crash and performance diagnostics, MailerLite (European Union) for newsletter and course emails, and Cloudflare and GitHub (United States) for hosting and delivering our website and the App's public content, plus Cloudflare's website analytics and Turnstile signup check. We share with each only what it needs to provide its service. We may also disclose information if the law requires it, to protect our rights or the safety of others, or to a successor if Tweeting Birds or the App is transferred, in which case this policy will continue to apply to that information.
 
 ## Data Retention
 

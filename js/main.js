@@ -377,11 +377,15 @@
     }
 
     // ===== Signup Forms (newsletter + email course) =====
-    // Both kinds of form post straight to MailerLite's form endpoint from here:
-    // no MailerLite script, no tracker. Double opt-in is on, so every accepted
-    // signup makes MailerLite email a confirmation to whatever was typed, and
-    // bots were using that to mail strangers. The checks below are free of
-    // third parties, and none of them tells a bot it was caught:
+    // Both kinds of form post to /api/subscribe, a Cloudflare Worker
+    // (workers/signup) that checks a Turnstile token and only then passes the
+    // address to MailerLite. No MailerLite script, no tracker. Double opt-in is
+    // on, so every accepted signup makes MailerLite email a confirmation to
+    // whatever was typed, and bots were using that to mail strangers. They
+    // posted straight to MailerLite's form endpoint, whose URL used to be in
+    // this file, so the page checks below never ran for them; the Worker's
+    // Turnstile check is the one they cannot skip. The page checks stay as a
+    // first filter, and none of them tells a bot it was caught:
     //
     //  - The <form action> is the page's own URL, so a crawler that replays the
     //    form HTML gets nothing. The endpoints live here, keyed by data-signup.
@@ -395,10 +399,18 @@
     //    and a timer alone would drop it as a bot.
     //  - An email shape check. This one is for people: a typo gets the browser's
     //    own validation bubble instead of a confirmation email to nowhere.
-    const SIGNUP_ENDPOINTS = {
-        newsletter: 'https://assets.mailerlite.com/jsonp/1995826/forms/174542333353657562/subscribe',
-        course: 'https://assets.mailerlite.com/jsonp/1995826/forms/174550881235109546/subscribe'
-    };
+    //  - Cloudflare Turnstile, in "interaction-only" mode: most people see
+    //    nothing, and a puzzle appears only when Cloudflare is unsure. Its
+    //    script loads the first time someone focuses or taps inside a signup
+    //    form, so just visiting a page sends nothing to Turnstile. The token
+    //    is minted for this form's kind (its "action") and checked by the
+    //    Worker, which rejects a token from another site or form.
+    const SIGNUP_ENDPOINT = '/api/subscribe';
+    const SIGNUP_KINDS = ['newsletter', 'course'];
+    // Public site key of the quipsapp.com Turnstile widget (not a secret).
+    const TURNSTILE_SITE_KEY = '__TURNSTILE_SITE_KEY__';
+    const TURNSTILE_SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+    const SIGNUP_ERROR_TEXT = "Sorry, that didn't go through. Please try again, or email nate@quipsapp.com and I'll add you by hand.";
     const SIGNUP_MIN_MS = 3000;
     const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
     const pageLoadedAt = Date.now();
@@ -440,11 +452,76 @@
         return isPlausibleEmail(value) ? value : '';
     }
 
+    // Loads the Turnstile script once, on first need. Resolves to the
+    // turnstile object, or rejects if it is blocked or fails to load.
+    let turnstileLoading = null;
+    function loadTurnstile() {
+        if (window.turnstile) return Promise.resolve(window.turnstile);
+        if (!turnstileLoading) {
+            turnstileLoading = new Promise((resolve, reject) => {
+                const script = document.createElement('script');
+                script.src = TURNSTILE_SCRIPT;
+                script.async = true;
+                script.onload = () => window.turnstile ? resolve(window.turnstile) : reject(new Error('turnstile missing'));
+                script.onerror = () => {
+                    turnstileLoading = null; // let a later attempt retry
+                    script.remove();
+                    reject(new Error('turnstile blocked'));
+                };
+                document.head.appendChild(script);
+            });
+        }
+        return turnstileLoading;
+    }
+
+    // One widget per form, rendered on first need into a slot appended to the
+    // form. getToken() runs the check and resolves to a fresh, single-use
+    // token (Turnstile tokens are good for one verification).
+    function makeTurnstile(form, kind) {
+        let widgetId = null;
+        let pending = null;
+        const slot = document.createElement('div');
+        slot.className = 'signup-turnstile';
+        form.appendChild(slot);
+
+        async function ensureWidget() {
+            const turnstile = await loadTurnstile();
+            if (widgetId === null) {
+                widgetId = turnstile.render(slot, {
+                    sitekey: TURNSTILE_SITE_KEY,
+                    action: kind,
+                    appearance: 'interaction-only',
+                    execution: 'execute',
+                    callback: token => { if (pending) { pending.resolve(token); pending = null; } },
+                    'error-callback': () => { if (pending) { pending.reject(new Error('turnstile error')); pending = null; } return true; },
+                    'timeout-callback': () => { if (pending) { pending.reject(new Error('turnstile timeout')); pending = null; } }
+                });
+            }
+            return turnstile;
+        }
+
+        return {
+            warm() { ensureWidget().catch(() => {}); },
+            async getToken() {
+                const turnstile = await ensureWidget();
+                turnstile.reset(widgetId);
+                return new Promise((resolve, reject) => {
+                    pending = { resolve, reject };
+                    turnstile.execute(widgetId);
+                });
+            }
+        };
+    }
+
     function initSignupForms() {
         document.querySelectorAll('form[data-signup]').forEach(form => {
             const kind = form.getAttribute('data-signup');
-            const endpoint = SIGNUP_ENDPOINTS[kind];
-            if (!endpoint) return;
+            if (!SIGNUP_KINDS.includes(kind)) return;
+            const challenge = makeTurnstile(form, kind);
+            // Load Turnstile once a person is at the form, not on page load.
+            ['focusin', 'pointerdown'].forEach(type => {
+                form.addEventListener(type, () => challenge.warm(), { once: true, passive: true });
+            });
 
             const emailInput = form.querySelector('input[type="email"]');
             const nameInput = form.querySelector('input[name="fields[name]"]');
@@ -473,7 +550,21 @@
                 }
             }
 
+            // One polite live region per form for a failed signup; cleared on
+            // the next try.
+            const errorLine = document.createElement('p');
+            errorLine.className = 'signup-error';
+            errorLine.setAttribute('role', 'status');
+            errorLine.hidden = true;
+            form.appendChild(errorLine);
+
+            function showError(text) {
+                errorLine.textContent = text;
+                errorLine.hidden = false;
+            }
+
             function setLoading(loading) {
+                if (loading) errorLine.hidden = true;
                 if (!submitBtn || !loadingBtn) return;
                 submitBtn.style.display = loading ? 'none' : 'inline-flex';
                 loadingBtn.style.display = loading ? 'inline-flex' : 'none';
@@ -538,21 +629,23 @@
                 }
 
                 try {
+                    const token = await challenge.getToken();
                     // Built field by field, so nothing else in the form is sent.
-                    const formData = new FormData();
-                    formData.append('fields[email]', email);
-                    if (nameInput) formData.append('fields[name]', nameInput.value.trim());
-                    formData.append('ml-submit', '1');
-                    formData.append('anticsrf', 'true');
-                    await fetch(endpoint, {
+                    const response = await fetch(SIGNUP_ENDPOINT, {
                         method: 'POST',
-                        body: formData,
-                        mode: 'no-cors'
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            kind,
+                            email,
+                            name: nameInput ? nameInput.value.trim() : '',
+                            token
+                        })
                     });
+                    if (!response.ok) throw new Error(`signup ${response.status}`);
                     showSuccess();
                 } catch (error) {
-                    // Reset button state on error
                     setLoading(false);
+                    showError(SIGNUP_ERROR_TEXT);
                 }
             });
         });
