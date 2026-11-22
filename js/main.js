@@ -408,7 +408,7 @@
     const SIGNUP_ENDPOINT = '/api/subscribe';
     const SIGNUP_KINDS = ['newsletter', 'course'];
     // Public site key of the quipsapp.com Turnstile widget (not a secret).
-    const TURNSTILE_SITE_KEY = '__TURNSTILE_SITE_KEY__';
+    const TURNSTILE_SITE_KEY = '0x4AAAAAAGMq_IgbUITJK7GV';
     const TURNSTILE_SCRIPT = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
     const SIGNUP_ERROR_TEXT = "Sorry, that didn't go through. Please try again, or email nate@quipsapp.com and I'll add you by hand.";
     const SIGNUP_MIN_MS = 3000;
