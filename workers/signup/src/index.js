@@ -49,9 +49,16 @@ async function verifyTurnstile(env, token, ip, kind) {
   const outcome = await res.json();
 
   // A token minted for another site or another form is not good here.
-  return outcome.success === true &&
+  const ok = outcome.success === true &&
     outcome.hostname === env.TURNSTILE_HOSTNAME &&
     outcome.action === kind;
+  if (!ok) {
+    // Shows in `wrangler tail`. Error codes, hostname and action are not personal data.
+    console.log('turnstile rejected', JSON.stringify({
+      errors: outcome['error-codes'], hostname: outcome.hostname, action: outcome.action, kind
+    }));
+  }
+  return ok;
 }
 
 async function sendToMailerLite(env, formId, email, name) {
@@ -63,13 +70,16 @@ async function sendToMailerLite(env, formId, email, name) {
 
   const url = `https://assets.mailerlite.com/jsonp/${env.MAILERLITE_ACCOUNT_ID}/forms/${formId}/subscribe`;
   const res = await fetch(url, { method: 'POST', body: form });
-  if (!res.ok) throw new Error(`mailerlite ${res.status}`);
+  if (!res.ok) throw new Error(`mailerlite ${res.status}: ${(await res.text()).slice(0, 200)}`);
   // The endpoint answers 200 with {success: false, errors} for a rejected
   // address; read it so a real failure is not reported as a signup.
   const text = await res.text();
   try {
     const body = JSON.parse(text);
-    if (body && body.success === false) return false;
+    if (body && body.success === false) {
+      console.log('mailerlite rejected', JSON.stringify(Object.keys((body.errors && body.errors.fields) || {})));
+      return false;
+    }
   } catch (e) {
     // Not JSON (older JSONP shape): a 200 is the success signal.
   }
