@@ -15,10 +15,11 @@ routes = [
 [vars]
 ALLOWED_ORIGIN = "https://quipsapp.com"
 TURNSTILE_HOSTNAME = "quipsapp.com"
-MAILERLITE_ACCOUNT_ID = "1995826"
+# MailerLite groups (not secret; ids from the dashboard). Joining the group
+# triggers the welcome / course automations.
+NEWSLETTER_GROUP_ID = "174542351825372337"
+COURSE_GROUP_ID = "174542494556489055"
 
 # Secrets (set with `npx wrangler secret put NAME`, never committed):
-#   TURNSTILE_SECRET     Turnstile widget secret key
-#   NEWSLETTER_FORM_ID   MailerLite form id for Quote Unquote (a NEW form, not
-#                        the one whose id was public in js/main.js)
-#   COURSE_FORM_ID       MailerLite form id for the email course (also new)
+#   TURNSTILE_SECRET      Turnstile widget secret key
+#   MAILERLITE_API_TOKEN  MailerLite API token (Integrations > API)

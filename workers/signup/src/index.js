@@ -6,19 +6,27 @@
  * addresses to it directly, skipping the page's honeypot and timer, and with
  * double opt-in on, MailerLite emailed each stranger a confirmation. Here every
  * signup must carry a Cloudflare Turnstile token that is checked server-side
- * before anything is sent, and the MailerLite form ids live only in this
- * Worker's secrets.
+ * before anything is sent. The Worker then adds the subscriber through
+ * MailerLite's REST API (connect.mailerlite.com) with a token kept in its
+ * secrets. Not the form endpoint: that sits behind MailerLite's own Cloudflare
+ * bot protection, which answers 403 to requests from a Worker.
+ *
+ * Double opt-in comes from the account setting "Double opt-in for API and
+ * integrations" (Account settings, Subscribe settings), which must be ON. It
+ * sends one shared confirmation email for both kinds. The welcome and course
+ * automations trigger on joining the group, so they still run.
  *
  * POST /api/subscribe  {kind: "newsletter" | "course", email, name?, token}
- *   200 {ok: true}                  passed to MailerLite (it sends the confirmation)
+ *   200 {ok: true}                  added to MailerLite (it sends the confirmation)
  *   400 {ok: false, error: "input"} bad body or address
  *   403 {ok: false, error: "challenge"} Turnstile token missing or rejected
  *   502 {ok: false, error: "upstream"}  Turnstile or MailerLite unreachable
  */
 
+// MailerLite group for each kind of signup (vars in wrangler.toml).
 const KINDS = {
-  newsletter: 'NEWSLETTER_FORM_ID',
-  course: 'COURSE_FORM_ID'
+  newsletter: 'NEWSLETTER_GROUP_ID',
+  course: 'COURSE_GROUP_ID'
 };
 
 // Same test as js/main.js isPlausibleEmail, so the two never disagree.
@@ -49,30 +57,41 @@ async function verifyTurnstile(env, token, ip, kind) {
   const outcome = await res.json();
 
   // A token minted for another site or another form is not good here.
-  return outcome.success === true &&
+  const ok = outcome.success === true &&
     outcome.hostname === env.TURNSTILE_HOSTNAME &&
     outcome.action === kind;
+  if (!ok) {
+    // Shows in `wrangler tail`. Error codes, hostname and action are not personal data.
+    console.log('turnstile rejected', JSON.stringify({
+      errors: outcome['error-codes'], hostname: outcome.hostname, action: outcome.action, kind
+    }));
+  }
+  return ok;
 }
 
-async function sendToMailerLite(env, formId, email, name) {
-  const form = new FormData();
-  form.append('fields[email]', email);
-  if (name) form.append('fields[name]', name);
-  form.append('ml-submit', '1');
-  form.append('anticsrf', 'true');
+async function sendToMailerLite(env, groupId, email, name) {
+  // No "status": a new address starts unconfirmed and gets the API
+  // confirmation email (account setting), and an address that is already
+  // active is just added to the group, with no second confirmation. Sending
+  // "status": "unconfirmed" would re-confirm active readers.
+  const body = { email, groups: [groupId] };
+  if (name) body.fields = { name };
 
-  const url = `https://assets.mailerlite.com/jsonp/${env.MAILERLITE_ACCOUNT_ID}/forms/${formId}/subscribe`;
-  const res = await fetch(url, { method: 'POST', body: form });
-  if (!res.ok) throw new Error(`mailerlite ${res.status}`);
-  // The endpoint answers 200 with {success: false, errors} for a rejected
-  // address; read it so a real failure is not reported as a signup.
-  const text = await res.text();
-  try {
-    const body = JSON.parse(text);
-    if (body && body.success === false) return false;
-  } catch (e) {
-    // Not JSON (older JSONP shape): a 200 is the success signal.
+  const res = await fetch('https://connect.mailerlite.com/api/subscribers', {
+    method: 'POST',
+    headers: {
+      'content-type': 'application/json',
+      accept: 'application/json',
+      authorization: `Bearer ${env.MAILERLITE_API_TOKEN}`
+    },
+    body: JSON.stringify(body)
+  });
+  if (res.status === 422) {
+    const detail = await res.json().catch(() => ({}));
+    console.log('mailerlite rejected', JSON.stringify(Object.keys(detail.errors || {})));
+    return false;
   }
+  if (!res.ok) throw new Error(`mailerlite ${res.status}: ${(await res.text()).slice(0, 200)}`);
   return true;
 }
 
@@ -100,12 +119,12 @@ export default {
     }
 
     const kind = typeof body.kind === 'string' ? body.kind : '';
-    const formId = KINDS[kind] ? env[KINDS[kind]] : undefined;
+    const groupId = KINDS[kind] ? env[KINDS[kind]] : undefined;
     const email = typeof body.email === 'string' ? body.email.trim() : '';
     const name = typeof body.name === 'string' ? body.name.trim().slice(0, 100) : '';
     const token = typeof body.token === 'string' ? body.token : '';
 
-    if (!formId || email.length > 254 || !EMAIL_PATTERN.test(email)) {
+    if (!groupId || email.length > 254 || !EMAIL_PATTERN.test(email)) {
       return json(400, { ok: false, error: 'input' });
     }
     if (!token || token.length > 2048) return json(403, { ok: false, error: 'challenge' });
@@ -115,7 +134,7 @@ export default {
       if (!(await verifyTurnstile(env, token, ip, kind))) {
         return json(403, { ok: false, error: 'challenge' });
       }
-      if (!(await sendToMailerLite(env, formId, email, name))) {
+      if (!(await sendToMailerLite(env, groupId, email, name))) {
         return json(400, { ok: false, error: 'input' });
       }
     } catch (e) {
