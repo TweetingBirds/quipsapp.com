@@ -8,6 +8,16 @@ description: >-
 runs:
   using: composite
   steps:
+  - name: Check the Turnstile site key is set
+    # js/main.js ships with a placeholder until the Turnstile widget exists in
+    # Cloudflare (workers/signup/README.md). Signups would fail without it.
+    run: |
+      if grep -q '__TURNSTILE_SITE_KEY__' js/main.js; then
+        echo "::error file=js/main.js::Set TURNSTILE_SITE_KEY (see workers/signup/README.md)"
+        exit 1
+      fi
+    shell: bash
+
   - name: Validate JSON data files
     run: |
       set -euo pipefail

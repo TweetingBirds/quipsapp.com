@@ -850,6 +850,18 @@ a {
     color: inherit;
 }
 
+/* Turnstile widget slot (interaction-only: empty unless Cloudflare asks for a
+   check) and the failed-signup line, both added by js/main.js. */
+.signup-turnstile:not(:empty) {
+    margin-top: 0.75rem;
+}
+
+.signup-error {
+    margin: 0.75rem 0 0;
+    font-size: 0.875rem;
+    color: inherit;
+}
+
 /* ===== CTA Section ===== */
 .cta {
     padding: var(--section-padding) 0;

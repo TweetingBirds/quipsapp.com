@@ -1,0 +1,24 @@
+# Signup relay for quipsapp.com (newsletter + email course).
+# Deployed separately from the static site: `npx wrangler deploy` from this
+# folder. See README.md for the one-time setup (secrets, Turnstile widget).
+name = "quips-signup"
+main = "src/index.js"
+compatibility_date = "2026-11-01"
+workers_dev = false
+
+# Same origin as the site, so the page's CSP (connect-src 'self') covers it
+# and there is no CORS to configure.
+routes = [
+  { pattern = "quipsapp.com/api/subscribe", zone_name = "quipsapp.com" }
+]
+
+[vars]
+ALLOWED_ORIGIN = "https://quipsapp.com"
+TURNSTILE_HOSTNAME = "quipsapp.com"
+MAILERLITE_ACCOUNT_ID = "1995826"
+
+# Secrets (set with `npx wrangler secret put NAME`, never committed):
+#   TURNSTILE_SECRET     Turnstile widget secret key
+#   NEWSLETTER_FORM_ID   MailerLite form id for Quote Unquote (a NEW form, not
+#                        the one whose id was public in js/main.js)
+#   COURSE_FORM_ID       MailerLite form id for the email course (also new)
