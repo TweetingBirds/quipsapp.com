@@ -266,7 +266,8 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
 - `js/main.js` POSTs JSON (`kind`, `email`, `name`, Turnstile `token`) to
   `/api/subscribe`, the Cloudflare Worker in `workers/signup/` (deployed on its
   own; see its README). The Worker checks the Turnstile token server-side, then
-  passes the address to MailerLite's form endpoint. **Never** load MailerLite
+  adds the address to the MailerLite group through the REST API (the form
+  endpoint 403s requests from Workers). **Never** load MailerLite
   scripts (`webforms.min.js`) or their `takel` tracking pixel — the site must
   not run third-party trackers — and never put a MailerLite form id or URL back
   in the site: bots read the old one out of `main.js` and posted to it directly,
@@ -274,7 +275,7 @@ Copyright line: `&copy; <span id="copyright-year">2025</span> Tweeting Birds. Al
 - **The HTML never carries the MailerLite URL.** A signup `<form>` has
   `data-signup="newsletter"` or `"course"`, and its `action` is the page's own
   URL (`/quote-unquote.html`, `/course.html`), so a crawler that replays the form
-  HTML gets nothing. The MailerLite form ids live only in the Worker's secrets.
+  HTML gets nothing. The MailerLite API token lives only in the Worker's secrets.
 - **Turnstile.** `main.js` appends a `.signup-turnstile` slot to each form and
   renders an `interaction-only` widget there (action = the form's kind), loading
   Turnstile's script on the first focus or tap inside a form, never on page
